@@ -23,26 +23,23 @@ def index():
 def site_search():
     """Retrieves site details given waste type and zipcode"""
 
-    user_input = request.args.get("")
+    user_input = request.args.get("waste")
     zipcode = int(request.args.get("zipcode"))
+
+    # sites = Site.query.filter(...) \
+                      # .filter
 
     # query the zipcodes table and returns the county_id
     county_id = db.session.query(Zipcodes.county_id).filter(Zipcodes.zipcodes == zipcode).first()
 
-    # if the county_id exists
-    if county_id:
-        # query the site_counties table for the site_id
-        site = db.session.query(SiteCounty.site_id).filter(SiteCounty.county_id == county_id)
-        # then query the site table for the site info, given the waste type
-        if user_input == "landfill":
-            site_info = (db.session.query(Site.site_name, Site.site_address, Site.site_city, Site.site_state)
-                .filter(Site.site_id == site, ))
-        elif user_input == "compost":
-            site_info = (db.session.query(Site.site_name, Site.site_address, Site.site_city, Site.site_state)
-                .filter(Site.site_id == site)
-        else:
-
-
-    else:
-        flash('Zipcode not in database')
-        return redirect("homepage.html")
+    # # if the county_id exists
+    # if county_id:
+    #     # query the site_counties table for the site_id
+    #     site = db.session.query(SiteCounty.site_id).filter(SiteCounty.county_id == county_id)
+    #     # then query the site table for the site info, given the waste type
+    #     if user_input == "landfill":
+    #         site_info = (db.session.query(Site.site_name, Site.site_address, Site.site_city, Site.site_state)
+    #             .filter(Site.site_id == site, ))
+    #     elif user_input == "compost":
+    #         site_info = (db.session.query(Site.site_name, Site.site_address, Site.site_city, Site.site_state)
+    #             .filter(Site.site_id == site)

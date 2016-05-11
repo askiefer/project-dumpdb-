@@ -16,9 +16,9 @@ function validateForm() {
 <body>
 
   <form action="/search" onsubmit="return validateForm()">
-  	<input type="checkbox" name="waste" value="waste">Waste<br> 
-  	<input type="checkbox" name="recycling" value="recycling">Recycling<br>
-  	<input type="checkbox" name="compost" value="compost">Compost<br>
+  	<input type="radio" name="waste" value="waste">Waste<br> 
+  	<input type="radio" name="waste" value="recycling">Recycling<br>
+  	<input type="radio" name="waste" value="compost">Compost<br>
 
     <input type="text" name="zipcode" value="Enter your zipcode">
     <input type="submit" value="submit">
