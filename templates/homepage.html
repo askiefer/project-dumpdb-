@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>dump db</h1>
+
+<script>
+
+function validateForm() {
+    var x = document.forms["myForm"]["fname"].value;
+    if (x == null || x == "") {
+        alert("Please fill in a zipcode");
+        return false;
+    }
+}
+</script>
+<body>
+
+  <form action="/search" onsubmit="return validateForm()">
+  	<input type="checkbox" name="waste" value="waste">Waste<br> 
+  	<input type="checkbox" name="recycling" value="recycling">Recycling<br>
+  	<input type="checkbox" name="compost" value="compost">Compost<br>
+
+    <input type="text" name="zipcode" value="Enter your zipcode">
+    <input type="submit" value="submit">
+  </form>
+</body>
+
+<h2>Description</h2>
+
+{% endblock %}
