@@ -28,7 +28,7 @@ def load_sites():
         if latitude:
             latitude = float(latitude)
             longitude = float(longitude)
-        # if there is an area, change to flaot
+        # if there is an area, change to float
         if area:
             area = float(area)
         # if there is a depth, change to float

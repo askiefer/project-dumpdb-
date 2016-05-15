@@ -1,13 +1,13 @@
-"""Models and database functions for """
+"""Data model for sites."""
 
 from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 ##################################################################
-# Model definitions
+# Model definition of a site
 
 class Site(db.Model):
-    """Facility site information"""
+    """Facility site information, including lat and long"""
 
     __tablename__ = "sites"
 
