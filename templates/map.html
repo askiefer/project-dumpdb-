@@ -3,87 +3,127 @@
 
 <script src="https://maps.googleapis.com/maps/api/js"></script>
 
-<script src="/static/mapstyle.js"></script>
-<script src="http://code.jquery.com/jquery.js"></script> 
+<!-- <script src="/static/mapstyle.js"></script> -->
+<script src="http://code.jquery.com/jquery.js"></script>
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 <!-- <link rel="stylesheet" href="map.css"> -->
 
 <script>
+// Checks the zipcode input box for a valid zipcode (client-side validation)
 function validateForm() {
-    var x = document.forms["myForm"]["fname"].value;
-    if (x == null || x == "") {
-        alert("Please fill in a zipcode");
+    var userInput = document.forms["zipcodeSearch"]["zipcode"].value;
+    // If userInput is empty or not a number, alert user 
+    if (userInput == null || userInput == "" || userInput.isNaN() == true ) {
+        alert("Please fill in a valid zipcode");
         return false;
     }
 }
+
 </script>
 
 <script type="text/javascript">
-    // When the window has finished loading create our google map below
-    google.maps.event.addDomListener(window, 'load', init);
+// When the window has finished loading create our google map below
+google.maps.event.addDomListener(window, 'load', init);
 
-    function init() {
-        
-        var mapOptions = {
-            zoom: 4,
-            center: new google.maps.LatLng(40.6700, -101.019460),
+// create empty sets to add zipcodes and state abbrs
+var zipcode_list = new Set();
+var state_list = new Set();
 
-            styles: [{"featureType":"administrative","elementType":"all","stylers":[{"visibility":"on"},{"lightness":33}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#f2e5d4"}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"color":"#c5dac6"}]},{"featureType":"poi.park","elementType":"labels","stylers":[{"visibility":"on"},{"lightness":20}]},{"featureType":"road","elementType":"all","stylers":[{"lightness":20}]},{"featureType":"road.highway","elementType":"geometry","stylers":[{"color":"#c5c6c6"}]},{"featureType":"road.arterial","elementType":"geometry","stylers":[{"color":"#e4d7c6"}]},{"featureType":"road.local","elementType":"geometry","stylers":[{"color":"#fbfaf7"}]},{"featureType":"water","elementType":"all","stylers":[{"visibility":"on"},{"color":"#acbcc9"}]}]
-        };
+function init() {
+    // Sets the appropriate map zoom, center point, and style
+    var mapOptions = {
+        zoom: 4,
+        center: new google.maps.LatLng(40.6700, -101.019460),
 
-        // Get the HTML DOM element that will contain your map 
-        var mapElement = document.getElementById('map');
+        styles: [{"featureType":"administrative","elementType":"all","stylers":[{"visibility":"on"},{"lightness":33}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#f2e5d4"}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"color":"#c5dac6"}]},{"featureType":"poi.park","elementType":"labels","stylers":[{"visibility":"on"},{"lightness":20}]},{"featureType":"road","elementType":"all","stylers":[{"lightness":20}]},{"featureType":"road.highway","elementType":"geometry","stylers":[{"color":"#c5c6c6"}]},{"featureType":"road.arterial","elementType":"geometry","stylers":[{"color":"#e4d7c6"}]},{"featureType":"road.local","elementType":"geometry","stylers":[{"color":"#fbfaf7"}]},{"featureType":"water","elementType":"all","stylers":[{"visibility":"on"},{"color":"#acbcc9"}]}]
+    };
 
-        // Create the Google Map using our element and options defined above
-        var map = new google.maps.Map(mapElement, mapOptions);
+    // Get the HTML DOM element that will contain your map 
+    var mapElement = document.getElementById('map');
 
-        // Defining the global infoWindow replaces the content inside for each marker
-        var infoWindow = new google.maps.InfoWindow({
-            width: 150
-        });
+    // Create the Google Map using our element and options defined above
+    var map = new google.maps.Map(mapElement, mapOptions);
 
-        $.get('/sites_json', function (sites) {
+    // Defining the global infoWindow replaces the content inside for each marker
+    var infoWindow = new google.maps.InfoWindow({
+        width: 150
+    });
 
-            // The JSON result looks like this:
+    // AJAX call using jQuery to retrieve the site objects
+    $.get('/sites_json', function (sites) {
 
-            // { 'json_list': [
-            // {'annualTonnage': null, 'area': 50, capacity': 24029809, 'latitude': 61.293281, 'site_name': u'Anchorage Regional Landfill', 'longitude': -149.602138}, {'latitude': 58.3528, 'site_name': u'Capitol Disposal Landfill', 'longitude': -134.4947},...
-            // ]}
+        // The JSON result looks like this:
 
-            // accesses the nested list of dictionaries   
-            var list = sites['json_list'];
+        // { 'json_list': [
+        // {'annualTonnage': null, 'area': 50, capacity': 24029809, 'latitude': 61.293281, 'site_name': u'Anchorage Regional Landfill', 'longitude': -149.602138}, {'latitude': 58.3528, 'site_name': u'Capitol Disposal Landfill', 'longitude': -134.4947},...
+        // ]}
 
-            var siteId, siteName, latitude, longitude;
+        // accesses the nested list of dictionaries   
+        var list = sites['json_list'];
 
-            // iterates through the list and identify the site id, name, lat, and long
-            for (i=0; i < list.length; i++) {
-                siteId = list[i]["siteID"];
-                siteName = list[i]["siteName"];
-                latitude = list[i]["latitude"];
-                longitude = list[i]["longitude"];
+        var siteId, siteName, latitude, longitude, waste, wasteYear, info, siteZipcode;
 
-                // if the lat / long exist, assign them to variables lat / long
-                if ((list[i]["latitude"] !== null) || (list[i]["latitude"] !== "")) {
-                    // assigns markers on map for lat / longs
-                    var marker = new google.maps.Marker({
-                        position: new google.maps.LatLng(latitude, longitude),
-                        map: map,
-                        title: 'Site Name: '+ list[i][siteName],
-                        icon: '/static/images/pin.png'
-                    });
-                }
-                closeInfoWindow(marker, map, infoWindow, siteName)
+        // iterates through the list and identify the site id, name, lat, and long
+        for (i=0; i < list.length; i++) {
+            siteId = list[i]["siteID"];
+            siteName = list[i]["siteName"];
+            latitude = list[i]["latitude"];
+            longitude = list[i]["longitude"];
+            waste = list[i]["wasteInPlace"];
+            wasteYear = list[i]["wasteInPlaceYear"];
+            siteState = list[i]["siteState"]
+
+            if (list[i]["siteState"] !== null) {
+                var site_state = list[i]["siteState"];
+                site_state.trim();
+                state_list.add(site_state);
             }
-
-            function closeInfoWindow(marker, map, infoWindow, siteName) {
-                google.maps.event.addListener(marker, 'click', function () {
-                    infoWindow.close();
-                    //specify the content for each infoWindow
-                    infoWindow.setContent(siteName);
-                    infoWindow.open(map, marker);
+            
+            // if the lat / long exist, assign them to variables lat / long
+            if ((list[i]["latitude"] !== null) || (list[i]["latitude"] !== "")) {
+                // assigns markers on map for lat / longs
+                var marker = new google.maps.Marker({
+                    position: new google.maps.LatLng(latitude, longitude),
+                    map: map,
+                    title: 'Site Name: '+ list[i][siteName],
+                    icon: '/static/images/pin.png'
                 });
             }
-        });
-    };
+            if (waste !== null) {
+                info = (
+                    '<div class="window-content">' +
+                        '<p><b>' + siteName + '</b></p>' +
+                        '<p>Waste in place: '+ waste + ' tons</p>' + wasteYear +
+                    '</div>');
+            } else {
+                info = (
+                    '<div class="window-content">' +
+                        '<p><b>' + siteName + '</b></p>' +
+                    '</div');
+            }
+            closeInfoWindow(marker, map, infoWindow, info);
+        }
+
+        function closeInfoWindow(marker, map, infoWindow, info) {
+            google.maps.event.addListener(marker, 'click', function () {
+                infoWindow.close();
+                //specify the content for each infoWindow
+                infoWindow.setContent(info);
+                infoWindow.open(map, marker);
+            });
+        
+        }
+    // convert the set of states abbrs to an array
+    var array = Array.from(state_list);
+    // Checks db and autocompletes given user input
+    $(function() {
+        // state_list === ["AK", "AL", "AR", "AZ", "CA" ...]
+        $( "#autocompleteState" ).autocomplete({source: array});
+    });
+
+    });
+};
+
 </script>
 
 <style>
@@ -99,15 +139,19 @@ function validateForm() {
 {% endblock %}
 
 {% block body %}
-    <form action="/search" onsubmit="return validateForm()">
-        <input type="radio" name="waste" value="waste">Waste<br> 
-        <input type="radio" name="waste" value="recycling">Recycling<br>
-        <input type="radio" name="waste" value="compost">Compost<br>
 
-        <input type="text" name="zipcode" value="Enter your zipcode">
-        <input type="submit" value="submit">
-    </form>
-        
+<div class="ui widget">
+    <label for="autocompleteZip">Select a zipcode: </label>
+    <input id="autocompleteZip">
+</div>
+
+<div class="ui widget">
+<form action ="/stateList">
+    <label for="autocompleteState">State site list: </label>
+    <input name="state" id="autocompleteState" value="Enter a state">
+    <input type="submit" value="search">
+</form>
+</div>
 
         <!-- The element that will contain our Google Map. This is used in both the Javascript and CSS above. -->
         <div id="map"></div>
