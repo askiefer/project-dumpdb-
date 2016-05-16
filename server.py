@@ -30,7 +30,6 @@ def site_search(zipcode):
     # if the site exists in the db
     if user_site:
         return jsonify(user_site)
-        
     else:
         flash("The zipcode you entered is not in dump_db. Please enter another.")
 
@@ -43,17 +42,9 @@ def create_map():
 @app.route('/sites_json')
 def json_sites():
 
-    sites = db.session.query((Site.site_id, Site.site_type, Site.site_name,
-        Site.longitude, Site.latitude)).all()
-    site_list = []
-    site_dict = {}
-
-    # iterates through the site objects and appends them to the site_list
-    for site in sites:
-        # convert the tuples into dictionaries
-        site_dict = site._asdict()
-        # append the dictionaries to the list
-        site_list.append(site_dict)
+    # query the db for the site objects
+    sites = Site.query.all()
+    return jsonify(json_list=[i.serialize for i in sites])
 
     # # iterates through the list of objects and creates a dictionary for each
     # for site in sites:
@@ -68,9 +59,7 @@ def json_sites():
     #             }
 
     # makes site_list a dictionary with key "sites" to jsonify
-    site_dict["sites"] = site_list
 
-    return jsonify(site_dict)
 
 # @app.route('/sites.json')
 # def site_info():
@@ -89,6 +78,7 @@ def json_sites():
 #                 "longitude": site.longitude
 #                 }}
 #         return jsonify(sites)
+
 
 #---------------------------------------------------------------------#
 

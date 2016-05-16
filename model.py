@@ -38,6 +38,33 @@ class Site(db.Model):
 
         return "<Site: site_id=%s, Name: site_name=%s>" % (self.site_id, self.site_name)
 
+    @property
+    def serialize(self):
+        """Returns object data in easily serializable format"""
+
+        return {
+            "siteID": self.site_id,
+            "siteType": self.site_type,
+            "siteName": self.site_name,
+            "siteState": self.site_state,
+            "siteAddress": self.site_address,
+            "siteCounty": self.site_county,
+            "siteZipcode": self.site_zipcode,
+            "latitude": self.latitude,
+            "longitude": self.longitude,
+            "ownershipType": self.ownership_type,
+            "ownershipOrganization": self.ownership_organization,
+            "yearOpened": self.year_opened,
+            "closureYear": self.closure_year,
+            "currentStatus": self.current_status,
+            "area": self.area,
+            "depth": self.depth,
+            "capacity": self.capacity,
+            "wasteInPlace": self.waste_in_place,
+            "wasteInPlaceYear": self.waste_in_place_year,
+            "annualTonnage": self.annual_tonnage,
+        }
+
 ##################################################################
 # Helper functions
 
