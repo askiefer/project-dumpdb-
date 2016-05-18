@@ -4,7 +4,8 @@ from jinja2 import StrictUndefined
 from flask import Flask, render_template, redirect, request, flash, session, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 
-from model import connect_to_db, db, Site
+from model import connect_to_db, db, Site, Zipcode
+from haversine import assign_info, haversine
 
 app = Flask(__name__)
 app.secret_key = "123"
@@ -19,22 +20,6 @@ def index():
 
     return render_template("base.html")
 
-# FIXME create an algorithm that calculates nearest site given zipcode
-# @app.route('/search/<int:zipcode>')
-# def site_search(zipcode):
-#     """Retrieves site details given zipcode"""
-
-#     zipcode = int(request.args.get("zipcode"))
-
-#     # queries the db for the site object given the requested zipcode
-#     user_site = Site.query.filter(site_zipcode=zipcode).first()
-
-#     # if the site exists in the db
-#     if user_site:
-#         return jsonify(json_list=[i.serialize for i in user_site])
-#     else:
-#         flash("The zipcode you entered is not in dump_db. Please enter another.")
-
 @app.route('/sites')
 def create_map():
     """Shows map of sites"""
@@ -47,6 +32,23 @@ def json_sites():
     # queries the db for the site objects
     sites = Site.query.all()
     return jsonify(json_list=[i.serialize for i in sites])
+
+@app.route('/zipSearch')
+def site_search():
+    """Retrieves nearest site using lat / long distance given a zipcode"""
+    # retrieves the user zipcode
+    zipcode = (request.args.get("zipcode"))
+
+    # user_coord is a tuple, eg (37.75, -122.43)
+    user_coord = db.session.query(Zipcode.latitude, Zipcode.longitude).filter(Zipcode.zip == zipcode).one()
+    
+    # returns list of tuples, ex [(1, 43.573894, -99.8492939), (2, 98.2734928, -92.72983478)...]
+    sites_info = db.session.query(Site.site_id, Site.latitude, Site.longitude).filter(Site.latitude.isnot(None), Site.longitude.isnot(None)).all()
+    
+    haversine(user_coord, sites_info)
+    
+    # haversine returns the site id, which we pass as JSON
+    return jsonify(json_list=min_key)
 
 @app.route('/stateList')
 def by_state():

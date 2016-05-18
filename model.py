@@ -33,11 +33,6 @@ class Site(db.Model):
     waste_in_place_year = db.Column(db.Integer, nullable=True)
     annual_tonnage = db.Column(db.Integer, nullable=True)
 
-    def __repr__(self):
-        """Provides site information when printed."""
-
-        return "<Site: site_id=%s, Name: site_name=%s>" % (self.site_id, self.site_name)
-
     @property
     def serialize(self):
         """Returns object data in easily serializable format"""
@@ -64,6 +59,30 @@ class Site(db.Model):
             "wasteInPlaceYear": self.waste_in_place_year,
             "annualTonnage": self.annual_tonnage,
         }
+
+
+    def __repr__(self):
+        """Provides site information when printed."""
+
+        return "<Site: site_id=%s, Name: site_name=%s>" % (self.site_id, self.site_name)
+
+##################################################################
+# Model definition of a zipcode
+
+class Zipcode(db.Model):
+    """Zipcodes with associated lat / longs"""
+
+    __tablename__ = "zip_codes"
+
+    zip = db.Column(db.String(5), nullable=False, primary_key=True)
+    latitude = db.Column(db.Float(precision=50))
+    longitude = db.Column(db.Float(precision=50))
+
+    def __repr__(self):
+        """Provides zipcode information when printed."""
+
+        return "<Zipcode: zip=%s, Lat: latitude=%s, Long: longitude=%s>" % (self.zip, self.latitude, self.longitude)
+
 
 ##################################################################
 # Helper functions
