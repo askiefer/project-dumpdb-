@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block head %} {% endblock %}
+{% block body %}
+Landfills by State
+    <ul>
+      {% for site in sites %}
+          <li>
+               <!--  site name (hyperlinked to site_details page, ownership organization -->
+                <a href="/sites/{{ site[0] }}">
+                  {{ site[1] }}</a>
+                {{ site[2] }}
+          </li>
+      {% endfor %}
+    </ul>
+
+{% endblock %}

@@ -5,7 +5,7 @@ from flask import Flask, render_template, redirect, request, flash, session, jso
 from flask_debugtoolbar import DebugToolbarExtension
 
 from model import connect_to_db, db, Site, Zipcode
-from haversine import assign_info, haversine
+from haversine import min_haversine
 
 app = Flask(__name__)
 app.secret_key = "123"
@@ -38,17 +38,17 @@ def site_search():
     """Retrieves nearest site using lat / long distance given a zipcode"""
     # retrieves the user zipcode
     zipcode = (request.args.get("zipcode"))
-
-    # user_coord is a tuple, eg (37.75, -122.43)
-    user_coord = db.session.query(Zipcode.latitude, Zipcode.longitude).filter(Zipcode.zip == zipcode).one()
+    print zipcode
+    # query the db for the user_coord's lat/long, which is a tuple, eg (37.75, -122.43)
+    lat1, lon1 = db.session.query(Zipcode.latitude, Zipcode.longitude).filter(Zipcode.zip == zipcode).first()
     
-    # returns list of tuples, ex [(1, 43.573894, -99.8492939), (2, 98.2734928, -92.72983478)...]
+    # returns a list of tuples, ex [(1, 43.573894, -99.8492939), (2, 98.2734928, -92.72983478)...]
     sites_info = db.session.query(Site.site_id, Site.latitude, Site.longitude).filter(Site.latitude.isnot(None), Site.longitude.isnot(None)).all()
     
-    haversine(user_coord, sites_info)
-    
+    closest_site_id = min_haversine(lat1, lon1, sites_info)
+
     # haversine returns the site id, which we pass as JSON
-    return jsonify(json_list=min_key)
+    return (str(closest_site_id))
 
 @app.route('/stateList')
 def by_state():
@@ -65,8 +65,7 @@ def site_details(site_id):
     """Details of a single site"""
 
     # returns the site object
-    site = (db.session.query(Site).filter(Site.site_id==site_id).first())
-    print site
+    site = db.session.query(Site).filter(Site.site_id==site_id).first()
     return render_template("site_details.html", site=site)
 
 #---------------------------------------------------------------------#
