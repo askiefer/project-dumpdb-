@@ -47,6 +47,7 @@ def site_search():
     
     closest_site_id = min_haversine(lat1, lon1, sites_info)
 
+    # zip_site_object = db.session.query(Site).filter(Site.site_id==closest_site_id).first()
     # haversine returns the site id, which we pass as JSON
     return (str(closest_site_id))
 

@@ -4,7 +4,7 @@
 <head>
   <title>dump_db</title>
 
-{% with messages = get_flashed_messages() %}
+<!-- {% with messages = get_flashed_messages() %}
   {% if messages %}
     <ul class=flashes>
     {% for message in messages %}
@@ -12,13 +12,17 @@
     {% endfor %}
     </ul>
   {% endif %}
-{% endwith %}
-
-	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-
-	<script src="http://code.jquery.com/jquery.js"></script> 
-  	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js">
-  	</script>
+{% endwith %} -->
+    <script src="https://maps.googleapis.com/maps/api/js"></script>
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/project_style.css">
+    <script src="/static/script.js" type='text/javascript'></script>
+    <script src="/static/map.js" type='text/javascript'></script>
+    <script src="/static/pie_chart.js" type='text/javascript'></script>
   	{% block head %}HEAD CONTENT GOES HERE{% endblock %}
 
 </head>

@@ -1,21 +1,13 @@
 {% extends 'base.html' %}
 {% block head %}
 
-<script src="https://maps.googleapis.com/maps/api/js"></script>
+<!-- <script src="https://maps.googleapis.com/maps/api/js"></script>
 <script src="http://code.jquery.com/jquery.js"></script>
 <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 <script src="/static/script.js" type='text/javascript'></script>
 <script src="/static/map.js" type='text/javascript'></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.js"></script>
-<!-- <link rel="stylesheet" href="map.css"> -->
-
-<style>
-  #map {
-    width: 650px;
-    height: 450px;
-    margin: 0 auto 0 auto;
-  }
-</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.js"></script> -->
+<!-- <link rel="stylesheet" href="/static/project_style.css"> -->
 
     <!-- // <script src="/static/map.js"></script> -->
 
@@ -40,5 +32,12 @@
 
 <!-- The element that contains the Google Map. This is used in both the Javascript and CSS above. -->
 <div id="map"></div>
+
+<div class="container">
+  <h2>Landfill Capacity</h2>
+  <div>
+    <canvas id="capacity" width="300" height="300"></canvas>
+  </div>
+</div>
 
 {% endblock %}

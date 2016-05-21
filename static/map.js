@@ -5,7 +5,7 @@ $(document).ready(function () {
 
     // create empty sets to add state abbrs
     var STATELIST = new Set();
-
+    var SITEID = [];
     var MARKERLIST = [];
     var INFOWINDOWLISTCONTENT = [];
 
@@ -56,6 +56,8 @@ $(document).ready(function () {
                 
                 var marker = makeMarker(site_data, marker_name);
                 
+                SITEID[(site_data["siteID"])] = site_data["siteID"];
+
                 MARKERLIST[(site_data["siteID"])] = marker;
 
                 marker.setMap(MAP);
@@ -76,6 +78,13 @@ $(document).ready(function () {
         }
         return site_object;
     };
+
+
+    // FIX ME
+    // if (site_object["siteState"] !== null) {
+    //     site_object["siteState"].trim();
+    //     STATELIST[(site_object["siteState"])] = site_object["siteState"];
+    // }
             
     function makeMarker(site_data, marker_name) {
         if ((site_data["latitude"] !== null) || (site_data["latitude"] !== "")) {
@@ -88,7 +97,8 @@ $(document).ready(function () {
         return marker_name;
         }
     }
-               
+
+    // passes in the sets the content for each infowindow
     function makeInfoWindowContent(site_data) {
         var info;
         if (site_data["wasteInPlace"] !== null) {
