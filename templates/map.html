@@ -82,7 +82,7 @@
                 <div class="col-lg-12">
                     <h1>Sites</h1>
                     <form>
-                    <label for="zipSearch">Enter a zipcode to track your trash: </label>
+                    <label for="zipSearch">Enter a zipcode to find your landfill: </label>
                     <input type="text" id="zipcode" name="zipcode" value="Enter a zipcode">
                     <input type="button" id="zip-button" value="submit">
                 </form>
@@ -105,6 +105,9 @@
                       <canvas id="capacity" width="300" height="300"></canvas>
                     </div>
                 <div class="col-lg-6">
+                  <div class="container">
+                    <div>
+                      <canvas id="growth" width="400" height="400"></canvas>
                   </div>
                 </div>
             </div>
@@ -116,9 +119,10 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                     <h1>Landfill Gas Calculator</h1>
-                      <form action="/calculator">
-                      <input type="text" id="calculator" name="calculator" value="Enter an amount (tons)">(1 ton = 2,000 lbs)
+                     <h1>Landfill Gas:Energy Calculator</h1><br>
+                     <p>The <a href="https://www3.epa.gov/lmop/">Landfill Methane Outreach Program</a> is a program run by the EPA to encourage landfill owners to harness landfill gas for electricity generation, with the goal of reducing national methane emissions. Landfills are the 3rd largest source of methane emissions in the U.S. Over a 20-year period, 1 ton of methane causes 72 times more global warming than 1 ton of carbon dioxide. The landfills participating in the program today produce approximately 15 million MWh of electricity annually, about enough to power 12 million houses.</p></br>
+                      <p><form action="/calculator">
+                      <input type="text" id="calculator" name="calculator" value="Enter an amount (tons)">&nbsp;&nbsp; 1 ton = 2,000 lbs</p>
                       <input type="button" id="calc-button" value="submit">
                       </form>
                 </div>

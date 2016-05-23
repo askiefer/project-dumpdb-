@@ -6,4 +6,4 @@ def calculator(tonnage):
     amt_lfg = tonnage * .432
     amt_mw = tonnage * 0.00000078
 
-    return lfg, format(amt_mw, '.2f')
+    return amt_lfg, format(amt_mw, '.2f')
