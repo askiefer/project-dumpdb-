@@ -32,13 +32,13 @@ def json_sites():
     # queries the db for the site objects
     sites = Site.query.all()
     return jsonify(json_list=[i.serialize for i in sites])
-
-@app.route('/zipSearch')
+    
+@app.route('/zipsearch')
 def site_search():
     """Retrieves nearest site using lat / long distance given a zipcode"""
     # retrieves the user zipcode
     zipcode = (request.args.get("zipcode"))
-    print zipcode
+    
     # query the db for the user_coord's lat/long, which is a tuple, eg (37.75, -122.43)
     lat1, lon1 = db.session.query(Zipcode.latitude, Zipcode.longitude).filter(Zipcode.zip == zipcode).first()
     
@@ -47,9 +47,11 @@ def site_search():
     
     closest_site_id = min_haversine(lat1, lon1, sites_info)
 
-    # zip_site_object = db.session.query(Site).filter(Site.site_id==closest_site_id).first()
+    zip_site_object = Site.query.filter(Site.site_id==closest_site_id).first()
+  
     # haversine returns the site id, which we pass as JSON
-    return (str(closest_site_id))
+   
+    return jsonify(zip_site_object.serialize)
 
 @app.route('/stateList')
 def by_state():
@@ -68,6 +70,16 @@ def site_details(site_id):
     # returns the site object
     site = db.session.query(Site).filter(Site.site_id==site_id).first()
     return render_template("site_details.html", site=site)
+
+@app.route('/calculator')
+def calculator():
+    """Calculates landfill gas and MW of electricity"""
+
+    tonnage = request.args.get("tonnage")
+    lfg, mw = calculator(tonnage)
+    print lfg, mw
+    print jsonify(lfg, mw)
+    return jsonify(lfg, mw)
 
 #---------------------------------------------------------------------#
 

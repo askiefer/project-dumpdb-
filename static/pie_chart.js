@@ -11,7 +11,7 @@ $(document).ready(function () {
             },
             {
                 value: site_object["capacity"],
-                color: "#4ACAB4",
+                color: "#ACAAA2",
                 label: "Remaining capacity",
             }
         ];

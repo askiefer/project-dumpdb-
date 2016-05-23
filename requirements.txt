@@ -1,0 +1,6 @@
+Jinja2==2.7.3
+Flask==0.10.1
+Flask-DebugToolbar==0.10.0
+Flask-SQLAlchemy==2.0
+Flask-WTF==0.8
+psycopg2==2.6.1
