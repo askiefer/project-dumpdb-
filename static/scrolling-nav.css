@@ -38,23 +38,30 @@ of those sections to manage the look and feel of the site. */
     background: #fff;
 }
 
-.stats-section {
-    height: 90%;
-    padding-top: 90px;
+.graph-section {
+    height: 130%;
+    padding-top: 70px;
     text-align: center;
     background: #eee;
 }
 
-.calculator-section {
+.stats-section {
     height: 90%;
     padding-top: 90px;
     text-align: center;
     background: #fff;
+}
+.calculator-section {
+    height: 90%;
+    padding-top: 90px;
+    text-align: center;
+    background: #eee;
 }
 
 .states-section {
     height: 90%;
     padding-top: 90px;
     text-align: center;
-    background: #eee;
+    background: #fff;
 }
+

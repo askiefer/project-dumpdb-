@@ -32,7 +32,7 @@ $(document).ready(function () {
 
             // access the nested list of objects 
             var sitesList = sites['json_list'];
-    
+
             // iterates through the list of objects
             for (i=0; i < sitesList.length; i++) {
                 siteObjects.push(sitesList[i]);
@@ -50,7 +50,10 @@ $(document).ready(function () {
              
                 setEventResponse(objectMarker, objectInfo);
                 // makePieData(parsedObject);
-                // setPieResponse()
+            
+            // // create the scatter plot 
+            // makeScatterPlot(sitesList);
+            // debugger;
             }
         });
     }
@@ -141,7 +144,7 @@ $(document).ready(function () {
         new Chart(capacity).Pie(pieData, pieOptions);
     }
 
-    // when submit is clicked, run the function
+    // when zip-submit is clicked, run the function
     $("#zip-button").click(function (evt) {
         var zipcode = $('#zipcode').val();
         handleZipSubmit(zipcode);
@@ -172,43 +175,59 @@ $(document).ready(function () {
         });
     }
 
-    function makeLineGraph() {
-            var data = {
-                labels: ["January", "February", "March", "April", "May", "June", "July"],
-                datasets: [
-            {
-                label: "My First dataset",
-                fill: false,
-                lineTension: 0.1,
-                backgroundColor: "rgba(75,192,192,0.4)",
-                borderColor: "rgba(75,192,192,1)",
-                borderCapStyle: 'butt',
-                borderDash: [],
-                borderDashOffset: 0.0,
-                borderJoinStyle: 'miter',
-                pointBorderColor: "rgba(75,192,192,1)",
-                pointBackgroundColor: "#fff",
-                pointBorderWidth: 1,
-                pointHoverRadius: 5,
-                pointHoverBackgroundColor: "rgba(75,192,192,1)",
-                pointHoverBorderColor: "rgba(220,220,220,1)",
-                pointHoverBorderWidth: 2,
-                pointRadius: 1,
-                pointHitRadius: 10,
-                data: [65, 59, 80, 81, 56, 55, 40],
+    $("#state-button").click(function (evt) {
+        var state = $('#autocompleteState').val();
+        makeScrollableMenu(state);
+    });
+
+    function makeScrollableMenu(state) {
+        // passes the state abbr to the server to return the state sites
+        $.get('/StateList', {"state": state}, function(stateListObjects) {
+            // this accesses the list of nested dictionaries
+            var stateList = stateListObjects["state_list"];
+            for (i=0; i < stateList.length; i++) {
+                // need to use Jinja in html to render the list in the menu 
             }
-        ]};
-        return data;
+        });
     }
 
-        var myLineChart = new Chart(ctx, {
-            type: 'line',
-            data: data,
-            options: options
-        });
+    // function makeLineGraph() {
+    //         var data = {
+    //             labels: ["January", "February", "March", "April", "May", "June", "July"],
+    //             datasets: [
+    //         {
+    //             label: "My First dataset",
+    //             fill: false,
+    //             lineTension: 0.1,
+    //             backgroundColor: "rgba(75,192,192,0.4)",
+    //             borderColor: "rgba(75,192,192,1)",
+    //             borderCapStyle: 'butt',
+    //             borderDash: [],
+    //             borderDashOffset: 0.0,
+    //             borderJoinStyle: 'miter',
+    //             pointBorderColor: "rgba(75,192,192,1)",
+    //             pointBackgroundColor: "#fff",
+    //             pointBorderWidth: 1,
+    //             pointHoverRadius: 5,
+    //             pointHoverBackgroundColor: "rgba(75,192,192,1)",
+    //             pointHoverBorderColor: "rgba(220,220,220,1)",
+    //             pointHoverBorderWidth: 2,
+    //             pointRadius: 1,
+    //             pointHitRadius: 10,
+    //             data: [65, 59, 80, 81, 56, 55, 40],
+    //         }
+    //     ]};
+    //     return data;
+    // }
 
-        var growth = document.getElementById("growth").getContext("2d");
+    //     var myLineChart = new Chart(ctx, {
+    //         type: 'line',
+    //         data: data,
+    //         options: options
+    //     });
 
-        new Chart(growth).Line(data, myLineChart);
+    //     var growth = document.getElementById("growth").getContext("2d");
+
+    //     new Chart(growth).Line(data, myLineChart);
 
 });

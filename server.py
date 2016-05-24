@@ -60,8 +60,9 @@ def by_state():
     state = request.args.get("state")
 
     # returns a list of tuples with name and owner for each site
-    state_sites = (db.session.query(Site.site_id, Site.site_name, Site.ownership_organization).filter(Site.site_state==state).order_by('site_name').all())
-    return render_template("state_list.html", sites=state_sites)
+    state_sites = Site.query.filter(Site.site_state==state).order_by('site_name').all()
+    
+    return jsonify(state_list=[i.serialize for i in sites])
 
 @app.route('/sites/<int:site_id>')
 def site_details(site_id):

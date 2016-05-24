@@ -15,7 +15,9 @@
     <script src="http://code.jquery.com/jquery.js"></script>
     <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.js"></script>
-  
+    <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="http://dimplejs.org/dist/dimple.v2.2.0.min.js"></script>
+
     <!-- CSS -->
     <link href="/static/scrolling-nav.css" rel="stylesheet">
     <link href="/static/project_style.css" rel="stylesheet">
@@ -24,6 +26,7 @@
 
     <!--  Custom JaveScript  -->
     <script src="/static/script.js" type='text/javascript'></script>
+    <!-- // <script src="/static/d3-graph.js" type='text/javascript'></script> -->
     <script src="/static/map_new.js" type='text/javascript'></script>
     <!-- // <script src="/static/pie_chart.js" type='text/javascript'></script> -->
 
@@ -60,6 +63,9 @@
                         <a class="page-scroll" href="#page-top"></a>
                     </li>
                     <li>
+                        <a class="page-scroll" href="#graph">Graph</a>
+                    </li>
+                    <li>
                         <a class="page-scroll" href="#stats">Stats</a>
                     </li>
                     <li>
@@ -89,6 +95,19 @@
                 </div>
                     <!-- The element that contains the Google Map. -->
                     <div id="map"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+     <!-- Stats Section -->
+    <section id="graph" class="graph-section">
+        <div class="container">
+            <div class="row">
+              <h1>Graph</h1>
+                <div class="col-lg-12">
+                    <div id="chartContainer">
+                    </div>
                 </div>
             </div>
         </div>
@@ -141,8 +160,22 @@
                 <form action="/stateList">
                     <label for="autocompleteState">State landfill list: </label>
                     <input name="state" id="autocompleteState" value="Enter a state">
-                    <input type="submit" value="submit">
+                    <input type="submit" value="submit" id="state-button">
                 </form>
+
+            <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Landfill Sites <span class="caret"></span></button>
+                <ul class="dropdown-menu scrollable-menu" role="menu">
+                    <li><a href="#">Action</a></li>
+                    <li><a href="#">Another action</a></li>
+                    <li><a href="#">Something else here</a></li>
+                    <li><a href="#">Action</a></li>
+                    <li><a href="#">Another action</a></li>
+                    <li><a href="#">Something else here</a></li>
+                </ul>
+            </div>
+
+
                 </div>
 
                 </div>
