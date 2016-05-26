@@ -6,3 +6,9 @@
     height: 500px;
     margin: 0 auto 0 auto;
 }
+
+#chartContainer {
+	width: 750px;
+	height: 500px;
+	margin: 0 auto 0 auto;
+}

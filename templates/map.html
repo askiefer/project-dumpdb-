@@ -12,11 +12,11 @@
   <title>dump_db</title>
 
     <script src="https://maps.googleapis.com/maps/api/js"></script>
-    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="https://code.jquery.com/jquery.js"></script>
     <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.js"></script>
-    <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-    <script src="http://dimplejs.org/dist/dimple.v2.2.0.min.js"></script>
+    <!-- // <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script> -->
+    <!-- // <script src="http://dimplejs.org/dist/dimple.v2.2.0.min.js"></script> -->
 
     <!-- CSS -->
     <link href="/static/scrolling-nav.css" rel="stylesheet">
@@ -25,10 +25,10 @@
     <link href="/static/bootstrap.css" rel="stylesheet">
 
     <!--  Custom JaveScript  -->
+    <script src="/static/plotly.js" type='text/javascript'></script>
     <script src="/static/script.js" type='text/javascript'></script>
-    <!-- // <script src="/static/d3-graph.js" type='text/javascript'></script> -->
     <script src="/static/map_new.js" type='text/javascript'></script>
-    <!-- // <script src="/static/pie_chart.js" type='text/javascript'></script> -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
     <!-- Scrolling Nav JavaScript -->
     <script src="/static/jquery.js" type='text/javascript'></script>
@@ -69,7 +69,7 @@
                         <a class="page-scroll" href="#stats">Stats</a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#calculator">Calculator</a>
+                        <a class="page-scroll" href="#calculator">Gas:Energy</a>
                     </li>
                     <li>
                         <a class="page-scroll" href="#states">States</a>
@@ -86,12 +86,12 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1>Sites</h1>
-                    <form>
+                    <h1>Landfill Sites by Zipcode</h1>
+                  <form>
                     <label for="zipSearch">Enter a zipcode to find your landfill: </label>
                     <input type="text" id="zipcode" name="zipcode" value="Enter a zipcode">
                     <input type="button" id="zip-button" value="submit">
-                </form>
+                  </form>
                 </div>
                     <!-- The element that contains the Google Map. -->
                     <div id="map"></div>
@@ -104,9 +104,9 @@
     <section id="graph" class="graph-section">
         <div class="container">
             <div class="row">
-              <h1>Graph</h1>
+              <h1>Landfill Capacity v. Waste in Place</h1>
                 <div class="col-lg-12">
-                    <div id="chartContainer">
+                    <div id="chartContainer" style="width: 140%; height: 700px;">
                     </div>
                 </div>
             </div>
@@ -138,7 +138,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                     <h1>Landfill Gas:Energy Calculator</h1><br>
+                     <h1>Landfill Gas:Energy</h1><br>
                      <p>The <a href="https://www3.epa.gov/lmop/">Landfill Methane Outreach Program</a> is a program run by the EPA to encourage landfill owners to harness landfill gas for electricity generation, with the goal of reducing national methane emissions. Landfills are the 3rd largest source of methane emissions in the U.S. Over a 20-year period, 1 ton of methane causes 72 times more global warming than 1 ton of carbon dioxide. The landfills participating in the program today produce approximately 15 million MWh of electricity annually, about enough to power 12 million houses.</p></br>
                       <p><form action="/calculator">
                       <input type="text" id="calculator" name="calculator" value="Enter an amount (tons)">&nbsp;&nbsp; 1 ton = 2,000 lbs</p>
@@ -156,7 +156,7 @@
                 <div class="col-lg-12">
                     <h1>States</h1>
 
-                <div class="ui widget">
+                <div class="ui-widget">
                 <form action="/stateList">
                     <label for="autocompleteState">State landfill list: </label>
                     <input name="state" id="autocompleteState" value="Enter a state">

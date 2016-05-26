@@ -32,12 +32,19 @@ $(document).ready(function () {
 
             // access the nested list of objects 
             var sitesList = sites['json_list'];
+            var openSites = [];
 
             // iterates through the list of objects
             for (i=0; i < sitesList.length; i++) {
                 siteObjects.push(sitesList[i]);
                 // add the object as nested dicts with the site 
                 // siteObjects[]
+            }
+            
+            for (i=0; i<sitesList.length; i++) {
+                if ((sitesList[i]["wasteInPlace"] !== null) && (sitesList[i]["wasteInPlaceYear"] !== null) && (sitesList[i]["capacity"] !== null) && (sitesList[i]["currentStatus"] === "Open")) {
+                    openSites.push(sitesList[i]);
+                }
             }
 
             for (i=0; i < siteObjects.length; i++) {
@@ -50,11 +57,9 @@ $(document).ready(function () {
              
                 setEventResponse(objectMarker, objectInfo);
                 // makePieData(parsedObject);
-            
-            // // create the scatter plot 
-            // makeScatterPlot(sitesList);
-            // debugger;
             }
+            // pass the list of sites to the scatter plot function
+            makeScatterPlot(openSites);
         });
     }
 

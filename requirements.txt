@@ -4,3 +4,4 @@ Flask-DebugToolbar==0.10.0
 Flask-SQLAlchemy==2.0
 Flask-WTF==0.8
 psycopg2==2.6.1
+plotly==1.10.0

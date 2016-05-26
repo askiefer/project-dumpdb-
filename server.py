@@ -6,6 +6,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 
 from model import connect_to_db, db, Site, Zipcode
 from haversine import min_haversine
+# from plotly import scatter_plot
 
 app = Flask(__name__)
 app.secret_key = "123"
@@ -31,6 +32,7 @@ def json_sites():
 
     # queries the db for the site objects
     sites = Site.query.all()
+
     return jsonify(json_list=[i.serialize for i in sites])
     
 @app.route('/zipsearch')
@@ -61,7 +63,7 @@ def by_state():
 
     # returns a list of tuples with name and owner for each site
     state_sites = Site.query.filter(Site.site_state==state).order_by('site_name').all()
-    
+
     return jsonify(state_list=[i.serialize for i in sites])
 
 @app.route('/sites/<int:site_id>')
