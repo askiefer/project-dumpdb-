@@ -1,9 +1,9 @@
-$(document).ready(function () {
+// $(document).ready(function () {
 
 	google.maps.event.addDomListener(window, 'load', init);
 
 	var INFOWINDOW = new google.maps.InfoWindow({
-        width: 150,
+        width: 170,
     });
 
 	function init() {
@@ -33,38 +33,48 @@ $(document).ready(function () {
             // access the nested list of objects 
             var sitesList = sites['json_list'];
             var openSites = [];
+            var stateSet = new Set();
 
-            // iterates through the list of objects
+            // iterates through the list of objects and puts state abrvs in a list
             for (i=0; i < sitesList.length; i++) {
+                stateSet.add(sitesList[i]["siteState"]);
                 siteObjects.push(sitesList[i]);
-                // add the object as nested dicts with the site 
-                // siteObjects[]
-            }
-            
-            for (i=0; i<sitesList.length; i++) {
-                if ((sitesList[i]["wasteInPlace"] !== null) && (sitesList[i]["wasteInPlaceYear"] !== null) && (sitesList[i]["capacity"] !== null) && (sitesList[i]["currentStatus"] === "Open")) {
-                    openSites.push(sitesList[i]);
-                }
             }
 
+            // sets the markers, infowindows, and event response for infowindows
             for (i=0; i < siteObjects.length; i++) {
                 var objectMarker = makeMarker(siteObjects[i]);
                 var parsedObject = parseSiteData(siteObjects[i]);
-                // var objectPieData = makePieData(siteObjects[i]);
                 var objectInfo = makeInfoWindowContent(parsedObject);
 
                 objectMarker.setMap(MAP);
-             
+            
                 setEventResponse(objectMarker, objectInfo);
-                // makePieData(parsedObject);
+            }
+            
+            // calculate the average waste in place and remaining space for landfills
+            var sumWasteInPlace = 0;
+            var sumCapacity = 0;
+            for (i=0; i<sitesList.length; i++) {
+                
+                if ((sitesList[i]["wasteInPlace"] !== null) && (sitesList[i]["wasteInPlaceYear"] !== null) && (sitesList[i]["capacity"] !== null) && (sitesList[i]["currentStatus"] === "Open")) {
+                    sumWasteInPlace += sitesList[i]["wasteInPlace"];
+                    sumCapacity += sitesList[i]["capacity"];
+                    openSites.push(sitesList[i]);
+                }
             }
             // pass the list of sites to the scatter plot function
             makeScatterPlot(openSites);
+
+            // pass the sum and capacity to calculate the pie chart data 
+            var sumData = makePieData(sumCapacity, sumWasteInPlace);
+            
+            // pass the data, chart elements, and DOM ID to render the pie chart
+            makePieChart(sumData, "avgCapacity");
+            autoComplete(stateSet, "#autocompleteState");
         });
     }
-
-    // All of these occur on one site object
-
+    // calculates the percent full of each site for the infowindow
 	function parseSiteData(siteObject) {
         if ((siteObject["wasteInPlace"] !== null) && (siteObject["capacity"] !== null)) {
             var percentFull = ((Number(siteObject["wasteInPlace"]) / Number(siteObject["capacity"])*100));
@@ -72,7 +82,7 @@ $(document).ready(function () {
         }
         return siteObject;
     }
-
+    // sets the marker for each object given lat / long
     function makeMarker(siteObject) {
         if ((siteObject["latitude"] !== null) || (siteObject["latitude"] !== "")) {
             // assigns markers on map for lat / longs
@@ -85,6 +95,7 @@ $(document).ready(function () {
         }
     }
 
+    // sets the content for the infowindow
     function makeInfoWindowContent(siteObject) {
         var info;
         if (siteObject["wasteInPlace"] !== null) {
@@ -104,54 +115,63 @@ $(document).ready(function () {
         return info;
     }
 
+    // tells the infowindow to close if one is open 
     function bindInfoWindow(marker, info) {
         INFOWINDOW.close();
         INFOWINDOW.setContent(info);
         INFOWINDOW.open(MAP, marker);
     }
 
+    // adds the listener to the infowindow
     function setEventResponse(marker, info) {
         google.maps.event.addListener(marker, 'click', function () {
             bindInfoWindow(marker, info);
         });
     }
 
-    function makePieData(siteObject) {
+    // sets the piechart data and options given waste and capacity
+    function makePieData(capacity, wasteInPlace) {
         var pieData;
-        // for (var key in siteObject) {
-        if (siteObject["capacity"] === null) {
+        var remainingSpace;
+        if ((capacity === null) || (wasteInPlace === null)) {
             pieData = [
                 {
                     value: 100,
                     color: "#ffffff",
-                    label: "No data currently available",
+                    label: "Data not currently available",
                 }];
         } else {
+            remainingSpace = (capacity-wasteInPlace);
             pieData = [
                 {
-                    value: siteObject["wasteInPlace"],
+                    value: wasteInPlace,
                     color: "#bbbbbb",
                     label: "Waste in place (tons)",
                 },
                 {
-                    value: siteObject["capacity"],
+                    value: remainingSpace,
                     color: "#78adc1",
                     label: "Remaining space (tons)",
                 }];
-            }
+        }
+        return pieData;
+    }
+
+    // function to get the DOM element and make the pie chart (sumdata is two objects)
+    function makePieChart(data, elementID) {
         var pieOptions = {
             segmentShowStroke : true,
             animateScale : true
-        };
-
-        var capacity = document.getElementById("capacity").getContext("2d");
-
-        new Chart(capacity).Pie(pieData, pieOptions);
+            };
+        var docID = document.getElementById(elementID).getContext("2d");
+        new Chart(docID).Pie(data, pieOptions);
     }
 
-    // when zip-submit is clicked, run the function
+    // when zip-submit is clicked, validate the form and send the zipcode to the db
     $("#zip-button").click(function (evt) {
-        var zipcode = $('#zipcode').val();
+        var zipcode = parseInt($('#zipcode').val());
+        validateForm(zipcode);
+        zipcode.toString();
         handleZipSubmit(zipcode);
     });
 
@@ -164,26 +184,34 @@ $(document).ready(function () {
             
             zipObjectMarker.setMap(MAP);
             bindInfoWindow(zipObjectMarker, zipObjectInfo);
-            makePieData(zipParsedObject);
+            var zipData = makePieData(zipParsedObject["capacity"], zipParsedObject["wasteInPlace"]);
+            makePieChart(zipData, "avgCapacity");
+            // lightUpSite(zipSiteObject);
         });
     }
     // calculator functionality 
     $("#calc-button").click(function (evt) {
-        var tonnage = $('#calculator').val();
-        debugger;
+        var tonnage = parseInt($('#calc').val());
+        validateForm(tonnage);
         calculator(tonnage);
     });
 
     function calculator(tonnage) {
+        tonnage.toString();
         $.get('/calculator', {"tonnage": tonnage}, function(amount) {
+            // JSON looks like {'lfg': '.808', 'mw': '.898'}
+            // need to display the information using AJAX 
             console.log(amount);
         });
     }
 
-    $("#state-button").click(function (evt) {
-        var state = $('#autocompleteState').val();
-        makeScrollableMenu(state);
-    });
+    // function to autocomplete an input box
+    function autoComplete(set, tag) {
+        var list = Array.from(set);
+        $(tag).autocomplete({
+            source: list
+        });
+    }
 
     function makeScrollableMenu(state) {
         // passes the state abbr to the server to return the state sites
@@ -194,6 +222,13 @@ $(document).ready(function () {
                 // need to use Jinja in html to render the list in the menu 
             }
         });
+    }
+
+    function validateForm(input) {
+    // If userInput is empty or not a number, alert user 
+        if (isNaN(input) === true) {
+            alert("Please fill in valid digits");
+        }
     }
 
     // function makeLineGraph() {
@@ -235,4 +270,4 @@ $(document).ready(function () {
 
     //     new Chart(growth).Line(data, myLineChart);
 
-});
+// });
