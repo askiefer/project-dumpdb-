@@ -33,6 +33,7 @@ of those sections to manage the look and feel of the site. */
 
 .intro-section {
     height: 110%;
+    width: 100%;
     padding-top: 100px;
     text-align: center;
     background: #fff;
@@ -63,5 +64,12 @@ of those sections to manage the look and feel of the site. */
     padding-top: 90px;
     text-align: center;
     background: #fff;
+}
+
+.report-section {
+    height: 90%;
+    padding-top: 90px;
+    text-align: center;
+    background: #eee;
 }
 

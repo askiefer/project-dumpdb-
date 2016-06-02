@@ -41,36 +41,42 @@
                 siteObjects.push(sitesList[i]);
             }
 
+             // sum the waste in place and remaining space for all landfills
+            var sumWasteInPlace = 0;
+            var sumCapacity = 0;
+
+            for (i=0; i<sitesList.length; i++) {
+                
+            if ((sitesList[i]["wasteInPlace"] !== null) && (sitesList[i]["wasteInPlaceYear"] !== null) && (sitesList[i]["capacity"] !== null) && (sitesList[i]["currentStatus"] === "Open")) {
+                    sumWasteInPlace += sitesList[i]["wasteInPlace"];
+                    sumCapacity += sitesList[i]["capacity"];
+                    openSites.push(sitesList[i]);
+                }
+            }
+
             // sets the markers, infowindows, and event response for infowindows
             for (i=0; i < siteObjects.length; i++) {
                 var objectMarker = makeMarker(siteObjects[i]);
                 var parsedObject = parseSiteData(siteObjects[i]);
                 var objectInfo = makeInfoWindowContent(parsedObject);
 
+                var objectChartData = makeChartData(siteObjects[i]["capacity"], siteObjects[i]["wasteInPlace"]);
+
+                var objectPieData = percentPieData(siteObjects[i]["wasteInPlace"], sumWasteInPlace);
+
                 objectMarker.setMap(MAP);
             
-                setEventResponse(objectMarker, objectInfo);
+                setEventResponse(objectMarker, objectInfo, objectChartData, objectPieData);
             }
             
-            // calculate the average waste in place and remaining space for landfills
-            var sumWasteInPlace = 0;
-            var sumCapacity = 0;
-            for (i=0; i<sitesList.length; i++) {
-                
-                if ((sitesList[i]["wasteInPlace"] !== null) && (sitesList[i]["wasteInPlaceYear"] !== null) && (sitesList[i]["capacity"] !== null) && (sitesList[i]["currentStatus"] === "Open")) {
-                    sumWasteInPlace += sitesList[i]["wasteInPlace"];
-                    sumCapacity += sitesList[i]["capacity"];
-                    openSites.push(sitesList[i]);
-                }
-            }
+
             // pass the list of sites to the scatter plot function
             makeScatterPlot(openSites);
-
             // pass the sum and capacity to calculate the pie chart data 
-            var sumData = makePieData(sumCapacity, sumWasteInPlace);
+            var sumData = makeChartData(sumCapacity, sumWasteInPlace);
             
             // pass the data, chart elements, and DOM ID to render the pie chart
-            makePieChart(sumData, "avgCapacity");
+            makePieChart(sumData, "sumCapacity", "pie-legend");
             autoComplete(stateSet, "#autocompleteState");
         });
     }
@@ -98,18 +104,20 @@
     // sets the content for the infowindow
     function makeInfoWindowContent(siteObject) {
         var info;
-        if (siteObject["wasteInPlace"] !== null) {
+        if ((siteObject["wasteInPlace"] !== null) && (siteObject["capacity"] !== null)) {
             info = (
                 '<div class="window-content" id='+siteObject["siteID"]+'">' +
                     '<p><b>' + siteObject["siteName"] + '</b></p>' +
                     '<p>Waste in place: '+ siteObject["wasteInPlace"] + ' tons (' + siteObject["wasteInPlaceYear"] + ')' + '<br>' +
                     'Capacity: '+ siteObject["capacity"] + '<br>' +
-                    'Percent full: ' + siteObject["roundedFull"] + '%' +
+                    'Percent full: ' + siteObject["roundedFull"] + '%' + '<br>' +
+                    'Ownership: ' + siteObject["ownershipType"] +
                 '</div>');
         } else {
             info = (
                 '<div class="window-content">' +
                     '<p><b>' + siteObject["siteName"] + '</b></p>' +
+                    'Ownership: ' + siteObject["ownershipType"] +
                 '</div');
         }
         return info;
@@ -123,29 +131,31 @@
     }
 
     // adds the listener to the infowindow
-    function setEventResponse(marker, info) {
+    function setEventResponse(marker, info, chartData, pieData) {
         google.maps.event.addListener(marker, 'click', function () {
             bindInfoWindow(marker, info);
+            makeDoughnutChart(chartData, "doughnut");
+            makePieChart(pieData, "pie", "pie-legend");
         });
     }
 
     // sets the piechart data and options given waste and capacity
-    function makePieData(capacity, wasteInPlace) {
-        var pieData;
+    function makeChartData(capacity, wasteInPlace) {
+        var chartData;
         var remainingSpace;
         if ((capacity === null) || (wasteInPlace === null)) {
-            pieData = [
+            chartData = [
                 {
                     value: 100,
-                    color: "#ffffff",
+                    color: "#bbbbbb",
                     label: "Data not currently available",
                 }];
         } else {
             remainingSpace = (capacity-wasteInPlace);
-            pieData = [
+            chartData = [
                 {
                     value: wasteInPlace,
-                    color: "#bbbbbb",
+                    color: "#CB4B16",
                     label: "Waste in place (tons)",
                 },
                 {
@@ -154,17 +164,56 @@
                     label: "Remaining space (tons)",
                 }];
         }
-        return pieData;
+        return chartData;
+    }
+
+    function percentPieData(wasteInPlace, sumWasteInPlace) {
+        var pieChartData;
+        if ((wasteInPlace !== null)) {
+            var sitePercent = ((wasteInPlace/sumWasteInPlace)*100).toFixed(2);
+            var percentRemaining = (100-sitePercent).toFixed(2);
+            pieChartData = [
+                {
+                    value: sitePercent,
+                    color: "#F0470E",
+                    label: "Percent covered by site",
+                },
+                {
+                    value: percentRemaining,
+                    color: "#bbbbbb",
+                    label: "Percent covered by remaining U.S. sites"
+                }];
+        }
+        return pieChartData;
     }
 
     // function to get the DOM element and make the pie chart (sumdata is two objects)
-    function makePieChart(data, elementID) {
+    function makePieChart(data, elementID, legendID) {
         var pieOptions = {
             segmentShowStroke : true,
-            animateScale : true
+            animateScale : true,
+            maintainAspectRation: false,
             };
-        var docID = document.getElementById(elementID).getContext("2d");
-        new Chart(docID).Pie(data, pieOptions);
+        var ctx = document.getElementById(elementID).getContext("2d");
+        var pie = new Chart(ctx).Pie(data, pieOptions);
+        document.getElementById(legendID).innerHTML=pie.generateLegend();
+    }
+
+    function makeDoughnutChart(data, elementID) {
+        var doughnutOptions = {
+            segmentShowStroke : true,
+            segmentStrokeColor : "#fff",
+            segmentStrokeWidth : 2,
+            percentageInnerCutout : 50,
+            animation : true,
+            animationSteps : 100,
+            animationEasing : "easeOutBounce",
+            responsive: true,
+        };
+
+        var ctx = document.getElementById(elementID).getContext("2d");
+        var doughnut = new Chart(ctx).Doughnut(data, doughnutOptions);
+        document.getElementById('doughnut-legend').innerHTML = doughnut.generateLegend();
     }
 
     // when zip-submit is clicked, validate the form and send the zipcode to the db
@@ -178,15 +227,22 @@
     function handleZipSubmit(zipcode) {
         // passes zipcode as a parameter to AJAX
         $.get('/zipsearch', {"zipcode": zipcode}, function(zipSiteObject) {
+            if (zipSiteObject["wasteInPlace"] !== null) {
+                calculator(zipSiteObject["wasteInPlace"]);
+                document.getElementById("calc").value = zipSiteObject["wasteInPlace"];
+            }
+            
             var zipObjectMarker = makeMarker(zipSiteObject);
             var zipParsedObject = parseSiteData(zipSiteObject);
             var zipObjectInfo = makeInfoWindowContent(zipParsedObject);
             
             zipObjectMarker.setMap(MAP);
             bindInfoWindow(zipObjectMarker, zipObjectInfo);
-            var zipData = makePieData(zipParsedObject["capacity"], zipParsedObject["wasteInPlace"]);
-            makePieChart(zipData, "avgCapacity");
-            // lightUpSite(zipSiteObject);
+            var zipData = makeChartData(zipParsedObject["capacity"], zipParsedObject["wasteInPlace"]);
+            var sumWasteInPlace = 3991852251;
+            var zipPieData = percentPieData(zipParsedObject["wasteInPlace"], sumWasteInPlace);
+            makeDoughnutChart(zipData, "doughnut");
+            makePieChart(zipPieData, "pie", "pie-legend");
         });
     }
     // calculator functionality 
@@ -198,14 +254,17 @@
 
     function calculator(tonnage) {
         tonnage.toString();
-        $.get('/calculator', {"tonnage": tonnage}, function(amount) {
-            // JSON looks like {'lfg': '.808', 'mw': '.898'}
-            // need to display the information using AJAX 
-            console.log(amount);
-        });
+        // returned JSON looks like {lfg: "864.0", mw: "0.00156"}
+        $.get('/calculator', {"tonnage": tonnage}, addAnswers);
     }
 
-    // function to autocomplete an input box
+    function addAnswers(answers) {
+        $('#landfill-gas').html(answers["lfg"]);
+        $('#megawatts').html(answers["mw"]);
+        $('#homes').html(answers["homes"]);
+    }
+
+    // function to autocomplete state input box
     function autoComplete(set, tag) {
         var list = Array.from(set);
         $(tag).autocomplete({
@@ -213,14 +272,52 @@
         });
     }
 
-    function makeScrollableMenu(state) {
-        // passes the state abbr to the server to return the state sites
-        $.get('/StateList', {"state": state}, function(stateListObjects) {
-            // this accesses the list of nested dictionaries
+    // retrieve input state 
+    $('#state-button').click(function (evt) {
+        var state = $('#autocompleteState').val();
+        setDropdown(state);
+    });
+
+    // sets the dropdown list for the given state
+    function setDropdown(state) {
+        // passes the state abbr to the server to return the state site objects
+        $.get('/stateList.json', {"state": state}, function(stateListObjects) {
+            // access the nested list of dictionaries
+            $("#dropdown").empty();
             var stateList = stateListObjects["state_list"];
-            for (i=0; i < stateList.length; i++) {
-                // need to use Jinja in html to render the list in the menu 
+            $.each(stateList, function(key,value) {
+                var option = $('<option/>').text(value.siteName);
+            $("#dropdown").append(option);
+            });
+        });
+    }
+
+    $('#dropdown').on("change", function () {
+        // get the name of the selected option
+        var name = $('#dropdown').val();
+        siteInfo(name);
+    });
+
+    function siteInfo(name) {
+        $.get('/site.json', {"name": name}, function(siteObject) {
+            $("#title").html(siteObject["site"]["siteName"]);
+            var body;
+            if ((siteObject["site"]["yearOpened"] !== null) && (siteObject["site"]["closureYear"] !== null)) {
+                body = (
+                    '<div class="panel-content"' +
+                    '<p><b>Year Opened: '+ siteObject["site"]["yearOpened"] + '<br>' +
+                    '<p><b>Expected Closure Year: ' + siteObject["site"]["closureyear"] +
+                    '<p><b>Area of Landfill: ' + siteObject["site"]["area"] + '<br>' +
+                    '<p><b>Depth of Landfill: ' + siteObject["site"]["depth"] + '<br>' +
+                    '</div>');
+            } else {
+                body = (
+                '<div class="panel-content"' +
+                '<p><b>Area of Landfill: ' + siteObject["site"]["area"] + '<br>' +
+                '<p><b>Depth of Landfill: ' + siteObject["site"]["depth"] + '<br>' +
+                '</div>');
             }
+            $("#body").html(body);
         });
     }
 
@@ -231,43 +328,6 @@
         }
     }
 
-    // function makeLineGraph() {
-    //         var data = {
-    //             labels: ["January", "February", "March", "April", "May", "June", "July"],
-    //             datasets: [
-    //         {
-    //             label: "My First dataset",
-    //             fill: false,
-    //             lineTension: 0.1,
-    //             backgroundColor: "rgba(75,192,192,0.4)",
-    //             borderColor: "rgba(75,192,192,1)",
-    //             borderCapStyle: 'butt',
-    //             borderDash: [],
-    //             borderDashOffset: 0.0,
-    //             borderJoinStyle: 'miter',
-    //             pointBorderColor: "rgba(75,192,192,1)",
-    //             pointBackgroundColor: "#fff",
-    //             pointBorderWidth: 1,
-    //             pointHoverRadius: 5,
-    //             pointHoverBackgroundColor: "rgba(75,192,192,1)",
-    //             pointHoverBorderColor: "rgba(220,220,220,1)",
-    //             pointHoverBorderWidth: 2,
-    //             pointRadius: 1,
-    //             pointHitRadius: 10,
-    //             data: [65, 59, 80, 81, 56, 55, 40],
-    //         }
-    //     ]};
-    //     return data;
-    // }
 
-    //     var myLineChart = new Chart(ctx, {
-    //         type: 'line',
-    //         data: data,
-    //         options: options
-    //     });
-
-    //     var growth = document.getElementById("growth").getContext("2d");
-
-    //     new Chart(growth).Line(data, myLineChart);
 
 // });

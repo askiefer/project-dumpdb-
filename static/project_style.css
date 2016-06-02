@@ -1,14 +1,109 @@
+.col-xs-8 {
+	padding-top: 10px;
+	/*margin-left: 20px;*/
+}
+
+.col-xs-4 {
+	height: 510px;
+	width: 100%
+}
+
+/*.row-fluid {
+	padding-top: 20px;
+}*/
+
 #map {
-/*	width: 60%;
-	height: 800px;
-*/	
     width: 750px;
     height: 500px;
     margin: 0 auto 0 auto;
 }
 
+.zipSearch {
+	padding-top: 10px;
+	margin: 0 auto 0 auto;
+	font-size: 15px;
+}
+
+#doughnut {
+	margin-top: 10px;
+  	left: 0px;
+}
+
+#pie {
+	margin-top: 10px;
+  	right: 0px;
+  	padding-right: 0px;
+}
+
+.doughnut-legend {
+    padding-top: 0px;
+    width: 230px;
+    margin: 0 auto 0 auto;
+    padding-bottom: 5px;
+}
+
+.doughnut-legend li {
+    list-style-type: none;
+    text-align: left;
+}
+
+.pie-legend {
+	padding-top: 0px;
+	width: 230px;
+	margin: 0 auto 0 auto;
+	padding-bottom: 20px;
+}
+
+.pie-legend li {
+    list-style-type: none;
+    text-align: left;
+}
+
+.pie-legend li span {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin-right: 5px;
+}
+
+.doughnut-legend li span{
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin-right: 5px;
+}
+
 #chartContainer {
 	width: 800px;
 	height: 600px;
-	margin-left: 100px;
+	margin-left: 10px;
 }
+.answers {
+	font-size: 20px;
+}
+
+#container {
+    width:300px;   
+    margin:0px auto;   
+    padding: 40px 0;   
+} 
+
+#scrollbox {   
+    width:400px;   
+    height:300px;    
+    overflow: auto; overflow-x:hidden;   
+}  
+
+#avgCapacity{
+	margin: 0 auto 0 auto;
+	margin-top: 80px;
+	height: 180%;
+	width: 180%;
+}
+
+#lineChart {
+	margin: 0 auto 0 auto;
+	/*margin-top*/
+	height: 70%;
+}
+

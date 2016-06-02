@@ -31,7 +31,7 @@ def create_map():
 def json_sites():
 
     # queries the db for the site objects
-    sites = Site.query.all()
+    sites = Site.query.filter(Site.current_status == "Open").all()
 
     return jsonify(json_list=[i.serialize for i in sites])
     
@@ -53,35 +53,38 @@ def site_search():
 
     return jsonify(zip_site_object.serialize)
 
-@app.route('/stateList')
+@app.route('/stateList.json')
 def by_state():
     """A list of sites for a given state"""
 
     state = request.args.get("state")
 
-    # returns a list of tuples with name and owner for each site
+    # returns the site objects for the submitted state
     state_sites = Site.query.filter(Site.site_state==state).order_by('site_name').all()
 
-    return jsonify(state_list=[i.serialize for i in sites])
+    return jsonify(state_list=[i.serialize for i in state_sites])
 
-# @app.route('/sites/<int:site_id>')
-# def site_details(site_id):
-#     """Details of a single site"""
+@app.route('/site.json')
+def site_details():
+    """Details of a single site"""
 
-#     # returns the site object
-#     site = db.session.query(Site).filter(Site.site_id==site_id).first()
-#     return render_template("site_details.html", site=site)
+    name = request.args.get("name")
+    # returns the site object that the user requested
+    site = db.session.query(Site).filter(Site.site_name==name).first()
+    return jsonify(site=site.serialize)
 
 @app.route('/calculator')
 def calculator():
     """Calculates landfill gas (lfg) and MW (mw) of electricity"""
 
     tonnage = float(request.args.get("tonnage"))
-    # lfg, mw = calculator(tonnage)
 
     lfg = str(tonnage * .432)
-    mw = str(tonnage * 0.00000078)
-    return jsonify(lfg=lfg, mw=mw)
+    dec_mw = tonnage * 0.00000078
+    homes = str(dec_mw * 1000.00)
+    mw = str(dec_mw)
+
+    return jsonify(lfg=lfg, mw=mw, homes=homes)
 
 #---------------------------------------------------------------------#
 
