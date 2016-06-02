@@ -8,9 +8,10 @@
 	width: 100%
 }
 
-/*.row-fluid {
-	padding-top: 20px;
-}*/
+.row-fluid {
+	padding-top: 10px;
+	margin: 0 auto 0 auto;
+}
 
 #map {
     width: 750px;
@@ -26,13 +27,15 @@
 
 #doughnut {
 	margin-top: 10px;
-  	left: 0px;
+  	/*left: 0px;*/
+  	margin: 0 auto 0 auto;
 }
 
 #pie {
 	margin-top: 10px;
-  	right: 0px;
-  	padding-right: 0px;
+  	/*right: 0px;*/
+  	/*padding-right: 0px;*/
+  	margin: 0 auto 0 auto;
 }
 
 .doughnut-legend {
@@ -72,12 +75,11 @@
     height: 12px;
     margin-right: 5px;
 }
-
-#chartContainer {
-	width: 800px;
-	height: 600px;
-	margin-left: 10px;
+	
+.svg-container {
+	margin-right: 0px;
 }
+
 .answers {
 	font-size: 20px;
 }
@@ -106,4 +108,23 @@
 	/*margin-top*/
 	height: 70%;
 }
+
+p.parsley-success {
+  color: #468847;
+  background-color: #DFF0D8;
+  border: 1px solid #D6E9C6;
+}
+
+p.parsley-error {
+  color: #B94A48;
+  background-color: #F2DEDE;
+  border: 1px solid #EED3D7;
+}
+
+.form-wrapper {
+	margin: 30px auto;
+  	max-width: 600px;
+  	text-align: left;
+}
+
 

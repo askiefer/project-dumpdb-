@@ -47,7 +47,7 @@ of those sections to manage the look and feel of the site. */
 }
 
 .stats-section {
-    height: 80%;
+    height: 100%;
     padding-top: 90px;
     text-align: center;
     background: #fff;
@@ -67,7 +67,7 @@ of those sections to manage the look and feel of the site. */
 }
 
 .report-section {
-    height: 90%;
+    height: 110%;
     padding-top: 90px;
     text-align: center;
     background: #eee;

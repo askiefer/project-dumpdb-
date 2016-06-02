@@ -217,11 +217,13 @@
     }
 
     // when zip-submit is clicked, validate the form and send the zipcode to the db
-    $("#zip-button").click(function (evt) {
+    $("#zip").submit(function (evt) {
+        evt.preventDefault();
         var zipcode = parseInt($('#zipcode').val());
         validateForm(zipcode);
         zipcode.toString();
         handleZipSubmit(zipcode);
+        
     });
 
     function handleZipSubmit(zipcode) {
@@ -246,7 +248,8 @@
         });
     }
     // calculator functionality 
-    $("#calc-button").click(function (evt) {
+    $("#calculator").submit(function (evt) {
+        evt.preventDefault();
         var tonnage = parseInt($('#calc').val());
         validateForm(tonnage);
         calculator(tonnage);
@@ -273,7 +276,8 @@
     }
 
     // retrieve input state 
-    $('#state-button').click(function (evt) {
+    $('#state-button').on('submit', function (evt) {
+        evt.preventDefault();
         var state = $('#autocompleteState').val();
         setDropdown(state);
     });

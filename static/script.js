@@ -1,12 +1,14 @@
 // Checks the zipcode input box for a valid zipcode (client-side validation)
 $(document).ready(function () {
 
-	function validateForm(input) {
-	// If userInput is empty or not a number, alert user 
-		if (userInput === null || userInput === "" || userInput.isNaN() === true ) {
-			alert("Please fill in valid digits");
-			return false;
-		}
-	}
-
+    $(function () {
+        $('#report-form').parsley().on('field:validated', function() {
+            var ok = $('.parsley-error').length === 0;
+            $('.callout-success').toggleClass('hidden', !ok);
+            $('.callout-warning').toggleClass('hidden', ok);
+        })
+        .on('form:submit', function() {
+    return false; // Don't submit form for this demo
+    });
+    });
 });
