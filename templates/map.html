@@ -69,10 +69,10 @@
                         <a class="page-scroll" href="#calculator">Gas to Energy Conversion</a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#states">Sites by State</a>
+                        <a class="page-scroll" href="#report">Report Data</a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#report">Report Data</a>
+                        <a class="page-scroll" href="#about">About</a>
                     </li>
                 </ul>
             </div>
@@ -165,65 +165,59 @@
         </div>
     </section>
 
-        <!-- States Section -->
-    <section id="states" class="states-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h1>Sites by State</h1>
-                        <div class="ui-widget">
-                            <form>
-                                <label for="autocompleteState">State landfill list: </label>
-                                <input name="state" id="autocompleteState" value="Enter a state">
-                                <input type="submit" value="submit" id="state-button"></form>
-                                <select id="dropdown"></select></div>
-                                <div class = "panel panel-info">
-                                   <div class = "panel-heading">
-                                      <span id="title"><h1 class="panel-title"></h1></span>
-                                </div>
-                                    <div class="panel-body"><span id="body"></span>
-                        </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-        <!-- Report Data Section -->
+        <!-- Report Section -->
     <section id="report" class="report-section">
         <div class="container">
             <h1>Report Data</h1>
                 <div class="row">
-                        <p id="update">Do you have landfill data you would like to submit? <br>Please fill out this form to update our database.</p>
+                     <p id="update">Do you have landfill data you would like to submit? <br>Please fill out this form to update our database.</p>
                         <div class="form-wrapper">
                             <div class="callout-warning hidden">
                                 <h4>Form invalid</h4>
                                 <p>Please validate the form to submit.</p>
                             </div>
-
                             <div class="callout-success hidden">
                               <h4>Thank you!</h4>
                               <p>We appreciate the update.</p>
                             </div>
-                            <p>
-                            <form action="/" method="POST" id="report-form" data-parsley-validate="">
+                                <p>
+                                <form action="/" method="POST" id="report-form" data-parsley-validate="">
                               <label for="firstname">Full Name :</label>
                               <input type="text" class="form-control" name="fullname"></p>
 
                                <p><label for="email">Email * :</label>
                                 <input type="email" class="form-control" name="email" data-parsley-trigger="change" required=""></p>
-                                <p>
-                                <label for="status">Site Status *:&nbsp;&nbsp;&nbsp;</label>
-            
-                                    Existing Landfill: <input type="radio" name="existing" id="existingSite" value="existing" required="">&nbsp;&nbsp;
-                                    New Landfill: <input type="radio" name="newSite" id="new" value="new">
-                                  </p>
-                                <p>
-                                <label for="landfill">Site Name * :</label>
-                                <input type="text" class="form-control" name="state" data-parsley-trigger="change" required=""></p>
-                               
+
                                  <p>
-                                  <label for="update">Update *:</label>
-                                  <select id="update" required="">
+                                <label for="status" id="status"><u>Existing Landfill</u></label>
+                                </p>
+                                
+                                <!-- <label for="autocompleteState">State landfill list: </label> -->
+                                <p>
+                                <form>
+                                    <label for="state">State:</label>
+                                <input type="text" id="autocompleteState" name="state" class="form-control"></p>
+                                
+                                <p><input type="submit" value="submit" id="state-button" class="btn btn-default">
+                                </form>
+                                <p>
+                                <select id="dropdown" class="form-control"></select></p>
+
+                               <!--  <div class = "panel panel-info">
+                                   <div class = "panel-heading">
+                                      <span id="title"><h1 class="panel-title"></h1></span>
+                                </div>
+                                    <div class="panel-body"><span id="body"></span> -->
+                                <p>
+                                 <label for="new" id="status"><u>New Landfill</u></label>
+                                 </p>
+                                 <p>
+                                 <label for="landfill">Site Name * :</label>
+                                <input type="text" class="form-control" name="state" data-parsley-trigger="change" required=""></p>
+
+                                 <p>
+                                  <label for="update">Information Update * :</label><br>
+                                  <select id="update" class="form-control" required="">
                                     <option value="">Select</option>
                                     <option value="press">Landfill Gas</option>
                                     <option value="net">Zipcode</option>
@@ -231,31 +225,46 @@
                                     <option value="mouth">Annual Tonnage</option>
                                     <option value="mouth">Capacity</option>
                                     <option value="other">Other..</option>
-                                  </select>
+                                  </select></p>
+                                  <p>
                                   <input type="text" class="form-control" name="update" data-parsley-trigger="change" required="">
                                   </p>
-
+<!-- 
                                   <label for="data">Other:</label>
-                                <input type="other" class="form-control" name="other">
+                                <input type="other" class="form-control" name="other"> -->
 
                                   <p>
-                                <p>
-                                  <label for="update">Landfill data source *:</label>
-                                  <select id="update" required="">
+                                  <label for="update">Landfill data source * :</label>
+                                  <select id="update" class="form-control" required="">
                                     <option value="">Select</option>
                                     <option value="press">Press</option>
                                     <option value="net">Internet</option>
                                     <option value="mouth">Report</option>
                                     <option value="mouth">Visit</option>
                                     <option value="other">Other..</option>
-                                  </select>
+                                  </select></p>
 
-                                  <br>
                                  <input type="submit" class="btn btn-default" value="Submit">
-                                 </div>  
-                             </div>    
+                            </div>  
+                        </div>    
                            
+                </div><br>
+        </div>
+    </section>
+
+     <!-- About Section -->
+    <section id="about" class="about-section">
+        <div class="container">
+            <div class="row">
+              <h1>About</h1>
+                <div class="col-xs-12">
+                    <div id="footer">
+                  <p>Anna Kiefer, Landfill Database 2016</p>
+                  <p>Contact information: <a href="mailto:annaskiefer@yahoo.com">
+                  annaskiefer@yahoo.com</a>.</p></div>
+                        
                 </div>
+            </div>
         </div>
     </section>
 

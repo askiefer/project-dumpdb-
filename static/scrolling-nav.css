@@ -59,16 +59,16 @@ of those sections to manage the look and feel of the site. */
     background: #eee;
 }
 
-.states-section {
-    height: 90%;
-    padding-top: 90px;
+.report-section {
+    height: 130%;
+    padding-top: 80px;
     text-align: center;
     background: #fff;
 }
 
-.report-section {
-    height: 110%;
-    padding-top: 90px;
+.about-section {
+    height: 50%;
+    padding-top: 80px;
     text-align: center;
     background: #eee;
 }
