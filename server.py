@@ -77,19 +77,12 @@ def site_details():
 def update_database():
     """Updates landfill site or adds a new site"""
 
-    name = request.form.get("name")
-    email = request.form.get("email")
     # the landfill name
     site = request.form.get("site")
+    new_site = request.form.get("new")
     # the type of information 
     update = request.form.get("update")
     info = request.form.get("info")
-    source = request.form.get("source")
-
-    # adds the user's entry to the site
-    user = User(name=name, email=email, source=source)
-    db.session.add(user)
-    db.session.commit()
 
     # checks to see if the site is in the database and, if it is, updates it given the info
     site = db.session.query(Site.site_id).filter(Site.site_name == site)

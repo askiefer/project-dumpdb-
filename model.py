@@ -82,24 +82,6 @@ class Zipcode(db.Model):
         """Provides zipcode information when printed."""
 
         return "<Zipcode: zip=%s, Lat: latitude=%s, Long: longitude=%s>" % (self.zip, self.latitude, self.longitude)
-
-##################################################################
-# Model definition of a user 
-
-class User(db.Model):
-    """Users with their associated email"""
-
-    __tablename__ = "users"
-
-    user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    name = db.Column(db.String(50), nullable=True)
-    email = db.Column(db.String(50), nullable=False)
-    data_source = db.Column(db.String(30), nullable=True)
-
-    def __repr__(self):
-        """Provides user update information when printed."""
-
-        return "<User: user_id=%s, Name: name=%s, Email: email=%s>" % (self.user_id, self.name, self.email)
         
 ##################################################################
 # Helper functions

@@ -76,7 +76,7 @@
             var sumData = makeChartData(sumCapacity, sumWasteInPlace);
             
             // pass the data, chart elements, and DOM ID to render the pie chart
-            makePieChart(sumData, "sumCapacity", "pie-legend");
+            makePieChart(sumData, "sumCapacity", "sum-legend");
             autoComplete(stateSet, "#autocompleteState");
         });
     }
@@ -248,11 +248,10 @@
         });
     }
     // calculator functionality 
-    $("#calculator").submit(function (evt) {
+    $("#calculator").keyup(function (evt) {
         evt.preventDefault();
         var tonnage = parseInt($('#calc').val());
-        validateForm(tonnage);
-        calculator(tonnage);
+        setTimeout(validateForm(tonnage), calculator(tonnage), 300);
     });
 
     function calculator(tonnage) {
@@ -276,63 +275,54 @@
     }
 
     // retrieve input state 
-    // $('#state-button').keyup(function(evt) {
-    //     var state = $('#autocompleteState').val();
-    //     setTimeout(setDropdown(state), 300);
-    // });
-    
-    // gets the value of the state button and returns the site objects 
-    $('#state-button').on('submit', function (evt) {
-        evt.preventDefault();
+    $('#autocompleteState').keyup(function(evt) {
         var state = $('#autocompleteState').val();
-        setDropdown(state);
+        setTimeout(setDropdown(state), 300);
     });
 
-    // // sets the dropdown list for the given state
-    // function setDropdown(state) {
-    //     // passes the state abbr to the server to return the state site objects
-    //     $.get('/stateList.json', {"state": state}, function(stateListObjects) {
-    //         // access the nested list of dictionaries
-    //         $("#dropdown").empty();
-    //         var stateList = stateListObjects["state_list"];
-    //         $.each(stateList, function(key,value) {
-    //             var option = $('<option/>').text(value.siteName);
-    //         $("#dropdown").append(option);
-    //         });
-    //     });
-    // }
+    // sets the dropdown list for the given state
+    function setDropdown(state) {
+        // passes the state abbr to the server to return the state site objects
+        $.get('/stateList.json', {"state": state}, function(stateListObjects) {
+            // access the nested list of dictionaries
+            $("#dropdown").empty();
+            var stateList = stateListObjects["state_list"];
+            $.each(stateList, function(key,value) {
+                var option = $('<option/>').text(value.siteName);
+            $("#dropdown").append(option);
+            });
+        });
+    }
 
-    // // get the name of the selected option
-    // $('#dropdown').on("change", function () {
-    //     var name = $('#dropdown').val();
-    //     siteInfo(name);
-    // });
+    // get the name of the selected option
+    $('#dropdown').on("change", function () {
+        var name = $('#dropdown').val();
+        siteInfo(name);
+    });
 
-    // function showUpdateResults(result) {
-    //     alert(result);
-    // }
+    function showUpdateResults(result) {
+        alert(result);
+    }
 
-    // function updateDatabase(evt) {
-    //     evt.preventDefault();
+    function updateDatabase(evt) {
+        evt.preventDefault();
 
-    //     var formInputs = {
-    //         "name": $("#fullname").val(),
-    //         "email": $("#email").val(),
-    //         "state": $("#state").val(),
-    //         "site": $("#dropdown").val(),
-    //         "new": $("#new").val(),
-    //         "update": $("#update").val(),
-    //         "other": $("#other").val(),
-    //         "source": $("#source").val(),
-    //     };
+        var formInputs = {
+            "site": $("#dropdown").val(),
+            "new": $("#new").val(),
+            "update": $("#update").val(),
+            "info": $("#info").val(),
+        };
 
-    //     $.post("/update_database",
-    //         formInputs,
-    //         showUpdateResults
-    //         );
-    // }
+        $.post("/update_database",
+            formInputs,
+            showUpdateResults
+            );
+    }
 
-    // $('#report-submit').on('submit', updateDatabase);
+    $('#report-submit').on('submit', updateDatabase);
+
+
 
     // displays info for the site 
     // function siteInfo(name) {
