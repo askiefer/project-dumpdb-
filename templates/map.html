@@ -134,10 +134,10 @@
                     <div class="col-xs-6">
                         <label for="sumCapacity">Cumulative Waste in Place<br />
                         <canvas id="sumCapacity" title="Cumulative Waste in Place"></canvas></label>
-                    </div>
                         <div id="pie-legend" class="chart-legend"></div>
+                        </div>
                     <div class="col-xs-6">
-                        <label for="lineChart">Average Waste Generated per Person in the U.S.<br />
+                        <label for="lineChart">U.S. Waste Generation By Material<br />
                         <canvas id="lineChart"></canvas></label>
                     </div>
                 </div>
@@ -170,7 +170,7 @@
         <div class="container">
             <h1>Report Data</h1>
                 <div class="row">
-                     <p id="update">Do you have landfill data you would like to submit? <br>Please fill out this form to update our database.</p>
+                     <p id="update">Do you have landfill data you would like to submit? <br>Please fill out this form to update the database.</p>
                         <div class="form-wrapper">
                             <div class="callout-warning hidden">
                                 <h4>Form invalid</h4>
@@ -181,12 +181,12 @@
                               <p>We appreciate the update.</p>
                             </div>
                                 <p>
-                                <form action="/" method="POST" id="report-form" data-parsley-validate="">
+                            <form action="/update_database" method="POST" id="report-form" data-parsley-validate="">
                               <label for="firstname">Full Name :</label>
-                              <input type="text" class="form-control" name="fullname"></p>
+                              <input type="text" class="form-control" id="name" name="fullname"></p>
 
                                <p><label for="email">Email * :</label>
-                                <input type="email" class="form-control" name="email" data-parsley-trigger="change" required=""></p>
+                                <input type="email" class="form-control" name="email" data-parsley-trigger="change" id="email" required=""></p>
 
                                  <p>
                                 <label for="status" id="status"><u>Existing Landfill</u></label>
@@ -194,7 +194,7 @@
                                 
                                 <!-- <label for="autocompleteState">State landfill list: </label> -->
                                 <p>
-                                <form>
+                                <form action="/stateList">
                                     <label for="state">State:</label>
                                 <input type="text" id="autocompleteState" name="state" class="form-control"></p>
                                 
@@ -213,29 +213,28 @@
                                  </p>
                                  <p>
                                  <label for="landfill">Site Name * :</label>
-                                <input type="text" class="form-control" name="state" data-parsley-trigger="change" required=""></p>
+                                <input type="text" class="form-control" name="state" data-parsley-trigger="change" id="new" required=""></p>
 
                                  <p>
                                   <label for="update">Information Update * :</label><br>
                                   <select id="update" class="form-control" required="">
                                     <option value="">Select</option>
-                                    <option value="press">Landfill Gas</option>
+                                    <option value="press">Status</option>
                                     <option value="net">Zipcode</option>
                                     <option value="mouth">Waste In Place</option>
                                     <option value="mouth">Annual Tonnage</option>
                                     <option value="mouth">Capacity</option>
-                                    <option value="other">Other..</option>
                                   </select></p>
                                   <p>
-                                  <input type="text" class="form-control" name="update" data-parsley-trigger="change" required="">
+                                  <input type="text" class="form-control" name="update" data-parsley-trigger="change" id="info" required="">
                                   </p>
 <!-- 
                                   <label for="data">Other:</label>
                                 <input type="other" class="form-control" name="other"> -->
 
                                   <p>
-                                  <label for="update">Landfill data source * :</label>
-                                  <select id="update" class="form-control" required="">
+                                  <label for="source">Landfill data source * :</label>
+                                  <select id="source" class="form-control" required="">
                                     <option value="">Select</option>
                                     <option value="press">Press</option>
                                     <option value="net">Internet</option>
@@ -244,7 +243,8 @@
                                     <option value="other">Other..</option>
                                   </select></p>
 
-                                 <input type="submit" class="btn btn-default" value="Submit">
+                                 <input type="submit" class="btn btn-default" value="Submit" id="report-submit">
+                             </form>
                             </div>  
                         </div>    
                            
@@ -254,15 +254,11 @@
 
      <!-- About Section -->
     <section id="about" class="about-section">
-        <div class="container">
+        <div class="container" id=#about>
             <div class="row">
               <h1>About</h1>
                 <div class="col-xs-12">
-                    <div id="footer">
-                  <p>Anna Kiefer, Landfill Database 2016</p>
-                  <p>Contact information: <a href="mailto:annaskiefer@yahoo.com">
-                  annaskiefer@yahoo.com</a>.</p></div>
-                        
+                    <div class="about">The landfill data used for the creation of this website is from the EPA's <a href="https://www3.epa.gov/lmop/index.html">Landfill Methane Outreach Program</a>. This website does not reflect any views of the EPA or its affiliates, nor does it claim to be an accurate, up-to-date source of landfill information. It was built solely for the educational purpose of the developer. Other available government data sources can be found at <a href="https://developer.epa.gov/category/data/">EPA's Developer Central</a>. All inquiries regarding the dataset and technologies used in the building of this website can be directed to <a href="mailto:annaskiefer@yahoo.com">Anna Kiefer</a>.</div>
                 </div>
             </div>
         </div>

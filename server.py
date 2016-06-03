@@ -73,6 +73,51 @@ def site_details():
     site = db.session.query(Site).filter(Site.site_name==name).first()
     return jsonify(site=site.serialize)
 
+@app.route('/update_database', methods=["POST"])
+def update_database():
+    """Updates landfill site or adds a new site"""
+
+    name = request.form.get("name")
+    email = request.form.get("email")
+    # the landfill name
+    site = request.form.get("site")
+    # the type of information 
+    update = request.form.get("update")
+    info = request.form.get("info")
+    source = request.form.get("source")
+
+    # adds the user's entry to the site
+    user = User(name=name, email=email, source=source)
+    db.session.add(user)
+    db.session.commit()
+
+    # checks to see if the site is in the database and, if it is, updates it given the info
+    site = db.session.query(Site.site_id).filter(Site.site_name == site)
+
+    if site:
+        if update == "Status":
+            info.lower()
+            site.current_status = info
+            # take info and update it
+        elif update == "Zipcode":
+            site.zipcode = info
+
+        elif update == "Waste In Place":
+            site.waste_in_place = info
+
+        elif update == "Annual Tonnage":
+            site.annual_tonnage = info
+
+        else:
+            site.capacity = info
+
+    else:
+        new_site = Site(site_name=site)
+        db.session.add(new_site)
+
+    db.session.commit()
+    
+
 @app.route('/calculator')
 def calculator():
     """Calculates landfill gas (lfg) and MW (mw) of electricity"""
