@@ -3,13 +3,15 @@
 from jinja2 import StrictUndefined
 from flask import Flask, render_template, redirect, request, flash, session, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
+# from flask.ext.cache import Cache
 
 from model import connect_to_db, db, Site, Zipcode
 from haversine import min_haversine
-from calculator import calculator
 
 app = Flask(__name__)
 app.secret_key = "123"
+app.config['CACHE_TYPE'] = 'simple'
+# app.cache = Cache(app)
 
 app.jinja_env.undefined = StrictUndefined
 
@@ -32,7 +34,6 @@ def json_sites():
 
     # queries the db for the site objects
     sites = Site.query.filter(Site.current_status == "Open").all()
-
     return jsonify(json_list=[i.serialize for i in sites])
     
 @app.route('/zipsearch')
@@ -50,7 +51,6 @@ def site_search():
     zip_site_object = Site.query.filter(Site.site_id==closest_site_id).first()
 
     # haversine returns the site id, which we pass as JSON
-
     return jsonify(zip_site_object.serialize)
 
 @app.route('/stateList.json')
@@ -117,10 +117,12 @@ def calculator():
 
     tonnage = float(request.args.get("tonnage"))
 
-    lfg = str(tonnage * .432)
-    dec_mw = tonnage * 0.00000078
-    homes = str(dec_mw * 1000.00)
+    dec_lfg = round((tonnage * .432), 2)
+    lfg = str(dec_lfg)
+    dec_mw = round((tonnage * 0.00000078), 2)
     mw = str(dec_mw)
+    dec_homes = round(dec_mw * 1000.00)
+    homes = str(dec_homes)
 
     return jsonify(lfg=lfg, mw=mw, homes=homes)
 

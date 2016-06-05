@@ -86,7 +86,7 @@
                 <h1>Landfill Sites by Zipcode</h1>
                     <form class="zipSearch" id="zip">
                         <label for="zipSearch">Enter a zipcode to find your landfill: &nbsp;</label>
-                        <input type="text" id="zipcode" name="zipcode" value="Enter a zipcode">
+                        <input type="text" id="zipcode" name="zipcode" placeholder="Enter a zipcode">
                         <input type="submit" id="zip-button" value="submit">
                             </form>
                                 <div class="row-fluid">
@@ -152,41 +152,11 @@
                      <h1>Gas to Energy Conversion</h1><br>
                      <p id="calculator">The <a href="https://www3.epa.gov/lmop/"><b>Landfill Methane Outreach Program</b></a> is a program run by the EPA to encourage landfill owners to harness the landfill gas produced by municipal solid waste for electricity generation, with the goal of reducing national methane emissions. Over a 20-year period, 1 ton of methane causes 72 times more global warming than 1 ton of carbon dioxide. The landfills participating in the program today produce approximately 15 million MWh of electricity annually, about enough to power <b>12 million homes</b>. Despite efforts to decrease methane emissions, burning landfill gas for energy produces harmful contaminants, making the benefits of these programs contested.</p></br>
                       <p><form action="/calculator" id="calculator">
-                      <input type="text" id="calc" name="calculator" value="Enter an amount (tons)">&nbsp; <b>tons of trash</b> (1 ton = 2,000 lbs)&nbsp;&nbsp;
+                      <input type="text" id="calc" name="calculator" placeholder="Enter an amount (tons)">&nbsp; <b>tons of trash</b> (1 ton = 2,000 lbs)&nbsp;&nbsp;
                       </form></p><br>
                       <p class="answers">Landfill gas produced (ft<sup>3</sup>): <span id="landfill-gas"</span></p>
                       <p class="answers">Megawatts produced (MW): <span id="megawatts"</span></p>
                       <p class="answers">Homes powered: <span id="homes"</span></p>
-
-
-                        <!-- <div id="calculator-image"> -->
-    
-                        <!-- <p> is optional (for css)-->
-                    <!--     <div class="result"><p></p></div>
-                        <div class="clear">C</div>
-                        
-                        <span>7</span>
-                        <span>8</span>
-                        <span>9</span>
-                        <span>+</span>
-                        
-                        <span>4</span>
-                        <span>5</span>
-                        <span>6</span>
-                        <span>-</span>
-                        
-                        <span>1</span>
-                        <span>2</span>
-                        <span>3</span>
-                        <span>÷</span>
-                        
-                        <span>0</span>
-                        <span>.</span>
-                        <span>=</span>
-                        <span>x</span> -->
-
-                     <!--  </div> -->
-
 
                 </div>
                 <div class="col-xs-2"></div>
@@ -201,36 +171,48 @@
                 <div class="row">
                      <p id="update">Do you have landfill data you would like to submit? <br>Please fill out this form to update the database.</p>
                         <div class="form-wrapper">
-                            <div class="callout-warning hidden">
+                            <!-- <div class="callout-warning hidden">
                                 <h4>Form invalid</h4>
                                 <p>Please validate the form to submit.</p>
                             </div>
                             <div class="callout-success hidden">
                               <h4>Thank you!</h4>
                               <p>We appreciate the update.</p>
-                            </div>
+                            </div> -->
                                 <p>
-                            <form action="/update_database" method="POST" id="report-form" data-parsley-validate="">
-                              <label for="firstname">Full Name :</label>
-                              <input type="text" class="form-control" id="name" name="fullname"></p>
+                            <form name="reportForm" action="/update_database" method="POST" id="reportForm">
+                              <label for="firstname">Full Name * :</label>
+                              <input type="text" class="form-control" id="name" name="fullname" data-parsley-required data-parsley-error-message="Please enter a valid name."></p>
 
                                <p><label for="email">Email * :</label>
-                                <input type="email" class="form-control" name="email" data-parsley-trigger="change" id="email" required=""></p>
+                                <input type="email" class="form-control" name="email" data-parsley-required data-parsley-error-message="Please enter a valid email address."></p>
 
+                                  <p>
+                                  <label for="source">Landfill data source * :</label>
+                                  <select id="source" class="form-control" data-parsley-required data-parsley-error-message="Please enter a valid data source.">
+                                    <option value="">Select</option>
+                                    <option value="press">Press</option>
+                                    <option value="net">Internet</option>
+                                    <option value="mouth">Report</option>
+                                    <option value="mouth">Visit</option>
+                                    <option value="other">Other..</option>
+                                  </select></p>
+
+                                </form>
                                  <p>
                                 <label for="status" id="status"><u>Existing Landfill</u></label>
                                 </p>
                                 
                                 <p>
                                 <form action="/stateList">
-                                    <label for="state">State * :</label>
+                                    <label for="state">State:</label>
 
-                                <input type="text" id="autocompleteState" name="state" class="form-control" data-parsley-trigger="change" required=""></p>
+                                <input type="text" id="autocompleteState" name="state" class="form-control"></p>
                                 
                                 </form>
                                 <p>
                                 <label for="landfill">Site Name:</label>
-                                <select id="dropdown" class="form-control"></select></p>
+                                <select id="dropdown" class="form-control" form="reportForm"></select></p>
 
                                 <p>
                                  <label for="new" id="status"><u>New Landfill</u></label>
@@ -240,8 +222,8 @@
                                 <input type="text" class="form-control" name="state" id="new"></p>
 
                                  <p>
-                                  <label for="update">Information Update * :</label><br>
-                                  <select id="update" class="form-control" name="update" data-parsley-trigger="change" required="">
+                                  <label for="update">Information Update:</label><br>
+                                  <select id="update" class="form-control" name="update" form="reportForm">
                                     <option value="">Select</option>
                                     <option value="press">Status</option>
                                     <option value="net">Zipcode</option>
@@ -250,21 +232,10 @@
                                     <option value="mouth">Capacity</option>
                                   </select></p>
                                   <p>
-                                  <input type="text" class="form-control" name="info" data-parsley-trigger="change" id="info" required="">
+                                  <input type="text" class="form-control" name="info" id="info" form="reportForm">
                                   </p>
 
-                                  <p>
-                                  <label for="source">Landfill data source :</label>
-                                  <select id="source" class="form-control">
-                                    <option value="">Select</option>
-                                    <option value="press">Press</option>
-                                    <option value="net">Internet</option>
-                                    <option value="mouth">Report</option>
-                                    <option value="mouth">Visit</option>
-                                    <option value="other">Other..</option>
-                                  </select></p>
-
-                                 <input type="submit" class="btn btn-default" value="Submit" id="report-submit">
+                                 <input type="submit" class="btn btn-default" id="report-submit" value="Submit" form="reportForm">
                              </form>
                             </div>  
                         </div>    
