@@ -94,10 +94,6 @@
   margin: 0 auto;
 }
 
-/*.plot-container {
-  margin-right: -20px;
-}*/
-
 #calculator {
   padding-left: 30px;
   padding-right: 30px;
@@ -105,11 +101,11 @@
 
 .table td {
   text-align: left;
-  width: 45px;
+  width: 50px;
 }
 
 .table-responsive {
-  width: 30%;
+  width: 35%;
   margin: 0 auto 0 auto;
   padding-top: 30px;
 }
