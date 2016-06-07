@@ -1,60 +1,48 @@
 import unittest
 from selenium import webdriver
 from selenium.common.exceptions import NoAlertPresentException
+from selenium.webdriver.support import expected_conditions as EC
 
-browser = webdriver.Firefox()
-browser.get("http://localhost:5000/sites")
-assert browser.title == 'Landfill Database'
+class TestPage(unittest.TestCase):
 
-zipcode = browser.find_element_by_id('zipcode')
-zipcode.send_keys("94513")
-btn = browser.find_element_by_id('zip-button')
-btn.click()
+    def setUp(self):
+        self.driver = webdriver.Firefox()
 
-lfg_result = browser.find_element_by_id('landfill-gas')
-mw_result = browser.find_element_by_id('megawatts')
-homes_result = browser.find_element_by_id('homes')
+    def tearDown(self):
+        self.driver.quit()
 
-assert lfg_result.text == '24994285.78'
+    def test_title(self):
+        self.driver.get("http://localhost:5000/sites")
+        self.assertEqual(self.driver.title, 'Landfill Database')
 
-# class TestPage(unittest.TestCase):
+    # def test_alert(self):
+    #     self.driver.get("http://localhost:5000/sites")
+    #     zipcode = self.driver.find_element_by_id('zipcode')
+    #     zipcode.send_keys("alphatest")
+    #     zip_btn = self.driver.find_element_by_id('zip-button')
+    #     zip_btn.click()
+    #     try:
+    #         context.driver.switch_to.alert.accept()
+    #     except NoAlertPresentException:
+    #         pass
 
-#     def set_up(self):
-#         self.driver = webdriver.Firefox()
-#         self.base_url = "http://localhost:5000/sites"
+    def test_calc(self):
+        self.driver.get("http://localhost:5000/sites")
+        zipcode = self.driver.find_element_by_id('zipcode')
+        zipcode.send_keys("94513")
 
-#     def tear_down(self):
-#         self.driver.quit()
+        btn = self.driver.find_element_by_id('zip-button')
+        btn.click()
 
-#     def test_title(self):
-#         driver = self.driver
-#         driver.get(self.base_url + "/")
-#         # driver.assertEqual(self.browser.title, 'Landfill Database')
+        lfg_result = self.driver.find_element_by_id('landfill-gas')
+        mw_result = self.driver.find_element_by_id('megawatts')
+        homes_result = self.driver.find_element_by_id('homes')
 
-#     def test_alert(self):
-#         driver = self.driver
-#         driver.get(self.base_url + "/")
-#         driver.find_element_by_id('zip-button')
-#         btn.click()
-#         alert = self.driver.switch_to_alert()
+        self.assertEqual(lfg_result.text, '24994285.78')
+        self.assertEqual(mw_result.text, '45.13')
+        self.assertEqual(homes_result.text, '45130.0')
 
-    # def test_calc(self):
-    #     self.browser.get("http://localhost:5000/sites")
-    #     zipcode = self.browser.find_element_by_id('zipcode')
-    #     zipcode.send_keys("94513")
-
-    #     btn = browser.find_element_by_id('zip-button')
-    #     btn.click()
-
-    #     lfg_result = self.browser.find_element_by_id('landfill-gas')
-    #     mw_result = self.browser.find_element_by_id('megawatts')
-    #     homes_result = self.browser.find_element_by_id('homes')
-
-    #     self.assertEqual(lfg_result.text, '24994285.78')
-    #     self.assertEqual(mw_result.text, '45.13')
-    #     self.assertEqual(homes_result.text, '455130.0')
-
-    # def rest_report(self):
+    # def test_report(self):
     #     report = driver.find_element_by_name('reportForm')
     #     pie = driver.find_element_by_id('pie')
     #     doughnut = driver.find_element_by_id('doughnut')
@@ -66,4 +54,5 @@ assert lfg_result.text == '24994285.78'
 
 if __name__ == '__main__':
     unittest.main()
+    driver = init_driver()
 

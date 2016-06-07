@@ -11,7 +11,7 @@
 .col-xs-6 {
   height: 600px;
   width: 100%;
-  padding-top: 50px;
+  padding-top: 70px;
 }
 
 .row-fluid {
@@ -56,11 +56,19 @@
     text-align: left;
 }
 
+.lineChart-legend {
+  text-align: left;
+  float: right;
+  padding-top: 75px;
+  padding-left: 0;
+  margin-left: -5px;
+}
+
 .pie-legend {
-	padding-top: 0px;
-	width: 230px;
-	margin: 0 auto 0 auto;
-	padding-bottom: 20px;
+  padding-top: 0px;
+  width: 230px;
+  margin: 0 auto 0 auto;
+  padding-bottom: 20px;
 }
 
 .pie-legend li {
@@ -81,13 +89,29 @@
     height: 12px;
     margin-right: 5px;
 }
-	
+
 .svg-container {
-	margin-right: 0px;
+  margin: 0 auto;
 }
 
-.answers {
-	font-size: 20px;
+/*.plot-container {
+  margin-right: -20px;
+}*/
+
+#calculator {
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+.table td {
+  text-align: left;
+  width: 45px;
+}
+
+.table-responsive {
+  width: 30%;
+  margin: 0 auto 0 auto;
+  padding-top: 30px;
 }
 
 #container {
@@ -110,9 +134,9 @@
 }
 
 #lineChart {
-	margin: 0 auto 0 auto;
-  height: 250px;
-  width: 400px;
+	padding-left: 0;
+  height: 300px;
+  width: 450px;
   padding-top: 30px;
 }
 
@@ -137,7 +161,7 @@ p.parsley-error {
 .about {
   max-width: 850px;
   margin: 0 auto 0 auto;
-  padding-top: 10px;
+  padding-top: 20px;
 }
 
 input.parsley-success,

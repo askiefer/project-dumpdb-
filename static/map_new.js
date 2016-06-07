@@ -1,4 +1,3 @@
-// $(document).ready(function () {
 
 	google.maps.event.addDomListener(window, 'load', init);
 
@@ -21,6 +20,7 @@
         var mapElement = document.getElementById('map');
 
         MAP = new google.maps.Map(mapElement, mapOptions);
+
 
         // AJAX call using jQuery to retrieve the site objects
         $.get('/sites_json', function (sites) {
@@ -219,7 +219,7 @@
     // when zip-submit is clicked, validate the form and send the zipcode to the db
     $("#zip").submit(function (evt) {
         evt.preventDefault();
-        var zipcode = parseInt($('#zipcode').val());
+        var zipcode = $('#zipcode').val();
         validateForm(zipcode);
         zipcode.toString();
         handleZipSubmit(zipcode);
@@ -229,6 +229,16 @@
     function handleZipSubmit(zipcode) {
         // passes zipcode as a parameter to AJAX
         $.get('/zipsearch', {"zipcode": zipcode}, function(zipSiteObject) {
+            if (zipSiteObject["siteName"] === 'Great Pacific Garbage Patch') {
+                // grab the element id and change it to the picture of Texas
+                var zipObjectMarker = makeMarker(zipSiteObject);
+                var zipParsedObject = parseSiteData(zipSiteObject);
+                var zipObjectInfo = makeInfoWindowContent(zipParsedObject);
+                zipObjectMarker.setMap(MAP);
+                bindInfoWindow(zipObjectMarker, zipObjectInfo);
+                setVortexImage();
+                return;
+            }
             if (zipSiteObject["wasteInPlace"] !== null) {
                 calculator(zipSiteObject["wasteInPlace"]);
                 document.getElementById("calc").value = zipSiteObject["wasteInPlace"];
@@ -247,6 +257,15 @@
             makePieChart(zipPieData, "pie", "pie-legend");
         });
     }
+
+    // function setVortexImage() {
+    //     $("#pie").remove("");
+    //     $"#doughnut").remove("");
+    //     $("#texas").attr('<img src="/static/images/texas.png">');
+    //     // $("#doughnut").before('<img src="/static/images/texas.png">');
+    //     debugger;
+    // }
+
     // calculator functionality 
     $("#calculator").keyup(function (evt) {
         evt.preventDefault();
@@ -326,10 +345,14 @@
     $("form[name=reportForm]").parsley();
 
     function validateForm(input) {
-    // If userInput is empty or not a number, alert user 
-        if (isNaN(input) === true) {
-            alert("Please fill in valid digits");
+    // If userInput is empty or not a number, alert user
+        if (input !== 'vortex') {
+            parseInt(input);
+                if (isNaN(input) === true) {
+                    alert("Please fill in valid digits");
+                }
+            }
         }
-    }
-
-// });
+        // if ((isNaN(input) === true) && (input !== 'vortex'))  {
+        //     alert("Please fill in valid digits");
+        // }

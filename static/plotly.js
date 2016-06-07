@@ -1,10 +1,10 @@
 $(document).ready(function () {
-// TODO make function that updates the chart with user site
 
     // [
             // {'annualTonnage': null, 'area': 50, capacity': 24029809, 'latitude': 61.293281, 'site_name': u'Anchorage Regional Landfill', 'longitude': -149.602138}, {'latitude': 58.3528, 'site_name': u'Capitol Disposal Landfill', 'longitude': -134.4947},...
             // ]
-    // best to filter the legend by rocky mountain region, pacific region, southwest)
+            
+    // filter the legend by rocky mountain region, pacific region, southwest)
     var map = {"ID": "rmr", "MT": "rmr", "WY": "rmr", "UT": "rmr", "CO": "rmr",
         "NV": "rmr", "CA": "pr", "WA": "pr", "OR": "pr", "HI": "pr", "AK": "pr",
         "TX": "sw", "OK": "sw", "AZ": "sw", "NM": "sw", "ND": "mw", "KY": "mw",
@@ -130,9 +130,8 @@ $(document).ready(function () {
         }
 
         var layout = {
-            // title: 'Site Capacity v. Waste in Place',
-            height: 500,
-            width: 1000,
+            height: 550,
+            width: 1100,
             
             xaxis: {
                 title: 'Year of Waste in Place',
@@ -152,21 +151,14 @@ $(document).ready(function () {
             plot_bgcolor: 'rgb(238, 238, 238)',
 
             margin: {
-                t: 20
+                t: 20,
             },
             hovermode: 'closest'
         };
         
         Plotly.plot('chartContainer', [rmrSeries, prSeries, swSeries, mwSeries, seSeries, neSeries], layout);
-        // var stateAbrvs = getStates(map);
-        // return stateAbrvs;
     }
 
-    // function getStates(map) {
-    //     var states = Object.keys(map);
-    //     return states.sort();
-    // }
 
     window.makeScatterPlot = makeScatterPlot;
-    // window.getStates = getStates;
 });

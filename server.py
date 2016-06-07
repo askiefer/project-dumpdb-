@@ -41,14 +41,19 @@ def site_search():
     """Retrieves nearest site using lat / long distance given a zipcode"""
     # retrieves the user zipcode
     zipcode = (request.args.get("zipcode"))
-    # query the db for the user_coord's lat/long, which is a tuple, eg (37.75, -122.43)
-    lat1, lon1 = db.session.query(Zipcode.latitude, Zipcode.longitude).filter(Zipcode.zip == zipcode).first()
-    # returns a list of tuples, ex [(1, 43.573894, -99.8492939), (2, 98.2734928, -92.72983478)...]
-    sites_info = db.session.query(Site.site_id, Site.latitude, Site.longitude).filter(Site.latitude.isnot(None), Site.longitude.isnot(None)).all()
+    print zipcode
 
-    closest_site_id = min_haversine(lat1, lon1, sites_info)
+    if zipcode == 'vortex':
+        zip_site_object = Site.query.filter(Site.site_id == 2648).first()
+    else:
+        # query the db for the user_coord's lat/long, which is a tuple, eg (37.75, -122.43)
+        lat1, lon1 = db.session.query(Zipcode.latitude, Zipcode.longitude).filter(Zipcode.zip == zipcode).first()
+        # returns a list of tuples, ex [(1, 43.573894, -99.8492939), (2, 98.2734928, -92.72983478)...]
+        sites_info = db.session.query(Site.site_id, Site.latitude, Site.longitude).filter(Site.latitude.isnot(None), Site.longitude.isnot(None)).all()
 
-    zip_site_object = Site.query.filter(Site.site_id==closest_site_id).first()
+        closest_site_id = min_haversine(lat1, lon1, sites_info)
+
+        zip_site_object = Site.query.filter(Site.site_id==closest_site_id).first()
 
     # haversine returns the site id, which we pass as JSON
     return jsonify(zip_site_object.serialize)

@@ -64,11 +64,19 @@ $(document).ready(function () {
         scaleSteps : 10,
         scaleStepWidth : 10000,
         scaleStartValue : 0,
-
+        // legendTemplate : '<ul class="lineChart-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].fillColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>'
     };
+
+    var legend = "<ul id=\"line-legend\" style=\"list-style-type: none;\">";
+    for(var i =0; i < lineChartData["datasets"].length; i++){
+        legend += "<li><div style=\"background-color:" + lineChartData["datasets"][i]["pointColor"] +
+        "; height: 12px; width: 12px; float: left;\"></div>&nbsp;&nbsp;" + lineChartData["datasets"][i]["label"] + "</li>";
+    }
+  
+    legend += "</ul>";
 
     var ctx = document.getElementById("lineChart").getContext("2d");
     var myNewChart = new Chart(ctx).Line(lineChartData, lineOptions);
-    document.getElementById("lineChart-legend").innerHTML = myNewChart.generateLegend();
+    document.getElementById("lineChart-legend").innerHTML = legend;
 
 });
