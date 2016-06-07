@@ -4,5 +4,5 @@ Landfill Database is a web app created by Anna Kiefer which is used to search fo
 
 The data is from the EPA's Landfill Methane Outreach Program, downloaded here https://www3.epa.gov/lmop/index.html.
 
-![alt tag]("")
+![alt tag]("https://github.com/askiefer/project-dumpdb-/blob/master/static/images/landfill_gif.gif")
 
