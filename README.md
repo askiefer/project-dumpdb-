@@ -2,8 +2,6 @@
 
 Landfill Database is a web app created by Anna Kiefer which is used to search for and display information about landfill sites. Integration of Google Maps displays landfill locations across the United States. National and local landfill information is represented using several data visuals, including a pie, doughnut, and bubble chart. A landfill gas-to-energy converter displays the Megawatts produced and homes powered for a given landfill's waste in place. Finally, users can update the database by submitting a report form. 
 
-The data is from the EPA's Landfill Methane Outreach Program, and can be found [here](https://www3.epa.gov/lmop/index.html).
-
 Learn more about the developer [here](https://www.linkedin.com/in/annakiefer).
 
 ![](http://i.imgur.com/736LxHB.gif?1)
@@ -14,6 +12,7 @@ Learn more about the developer [here](https://www.linkedin.com/in/annakiefer).
 - [Search Function](#searchfunction)
 - [Data Visualizations](#datavisualizations)
 - [Gas to Energy Converter](#gastoenergy)
+- [Data](#data)
 
 ## <a name="technologiesused"></a>Technologies Used
 - [Python](https://www.python.org/)
@@ -64,3 +63,6 @@ The Landfill Capacity by Region graph was created using Plotly.js. The plot grap
 
 The landfill gas to energy feature converts the amount of waste in place in tons of the returned landfill to landfill gas produced, Megawatts generated, and number of homes powered.
 
+## <a name="data"></a>Data
+
+The landfill site data is from the EPA's Landfill Methane Outreach Program, and can be found [here](https://www3.epa.gov/lmop/index.html). Other available government data sources can be found at EPA's Developer Central [here](https://developer.epa.gov/category/data/).
