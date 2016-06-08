@@ -1,6 +1,6 @@
 # Landfill Database
 
-Landfill Database is a web app created by Anna Kiefer which is used to search for and display information about landfill sites. Integration of Google Maps displays landfill locations across the United States. National and local landfill information is represented using several data visuals, including a pie, doughnut, and bubble chart. A landfill gas-to-energy converter displays the Megawatts produced and homes powered for a given landfill's waste in place. Finally, users can update the database by submitting a report form. 
+Landfill Database is a web app created by Anna Kiefer which is used to search for and display information about landfill sites. Integration of the Google Maps API displays landfill locations across the United States. National and local landfill information is represented using several data visuals, including a pie, doughnut, and bubble chart. A landfill gas-to-energy converter displays the Megawatts produced and homes powered for a given landfill's waste in place. Finally, users can update the database by submitting a report form. 
 
 Learn more about the developer [here](https://www.linkedin.com/in/annakiefer).
 
