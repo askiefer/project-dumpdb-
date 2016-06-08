@@ -61,7 +61,7 @@ The Landfill Capacity by Region graph was created using Plotly.js. The plot grap
 
 ## <a name="gastoenergy"></a>Gas to Energy Converter
 
-The landfill gas to energy feature converts the amount of waste in place in tons of the returned landfill to landfill gas produced, Megawatts generated, and number of homes powered.
+The landfill gas to energy feature converts the amount of waste in place in tons of the returned landfill to the average cubic feet of landfill gas produced, Megawatts of energy generated, and number of homes powered. One million tons of municipal solid waste results in approximately 432,000 cubic feet of LFG and .78 Megawatts of electricity.
 
 ## <a name="data"></a>Data
 

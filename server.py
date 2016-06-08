@@ -121,7 +121,8 @@ def calculator():
     """Calculates landfill gas (lfg) and MW (mw) of electricity"""
 
     tonnage = float(request.args.get("tonnage"))
-
+    # 1 million tons of Municipal Solid Waste = ~ 432,000 cubic feet of LFG and ~.78 MW of electricity
+    # 1 ton of MSW = ~ .432 cubic feet of LFG and ~ 7.8e^-7
     dec_lfg = round((tonnage * .432), 2)
     lfg = str(dec_lfg)
     dec_mw = round((tonnage * 0.00000078), 2)
