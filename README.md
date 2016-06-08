@@ -39,8 +39,8 @@ The data is from the EPA's Landfill Methane Outreach Program, downloaded here ht
 
 *Future*
 
-- [] Flask app and database deployed using Heroku
-- [] Sites requests cached in Flask-Cache
+- [ ] Flask app and database deployed using Heroku
+- [ ] Sites returned cached in Flask-Cache
 
 ## <a name="searchfunction"></a>Search Function
 
