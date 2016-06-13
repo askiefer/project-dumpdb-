@@ -67,4 +67,4 @@ The landfill gas to energy feature converts the amount of waste in place in tons
 
 The landfill site data is from the EPA's Landfill Methane Outreach Program, and can be found [here](https://www3.epa.gov/lmop/index.html). Other available government data sources can be found at EPA's Developer Central [here](https://developer.epa.gov/category/data/).
 
-For an Easter Egg, type **vortex into the zip code field to find the Great Pacific Garbage Patch. 
+For an Easter Egg, type the word **vortex** into the zip code field to find the Great Pacific Garbage Patch. 
