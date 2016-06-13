@@ -36,11 +36,11 @@ Learn more about the developer [here](https://www.linkedin.com/in/annakiefer).
 - [X] Result rendered as a pie and doughnut chart (Chart.js)
 - [X] Flask app renders HTML and handles AJAX requests to the database
 - [X] Aggregation data rendered as a bubble chart (Plotly.js)
-- [x] Report data form uses Parsley for form validation 
+- [X] Report data form uses Parsley for form validation 
+- [X] Flask app and database deployed using Heroku
 
 *Future*
 
-- [ ] Flask app and database deployed using Heroku
 - [ ] Sites returned cached in Flask-Cache
 
 ## <a name="searchfunction"></a>Search Function
@@ -66,3 +66,5 @@ The landfill gas to energy feature converts the amount of waste in place in tons
 ## <a name="data"></a>Data
 
 The landfill site data is from the EPA's Landfill Methane Outreach Program, and can be found [here](https://www3.epa.gov/lmop/index.html). Other available government data sources can be found at EPA's Developer Central [here](https://developer.epa.gov/category/data/).
+
+For an Easter Egg, type **vortex into the zip code field to find the Great Pacific Garbage Patch. 
