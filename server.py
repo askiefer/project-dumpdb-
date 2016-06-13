@@ -9,10 +9,8 @@ from model import connect_to_db, db, Site, Zipcode, Update
 from haversine import min_haversine
 
 app = Flask(__name__)
-app.secret_key = "123"
-app.config['CACHE_TYPE'] = 'simple'
-# app.cache = Cache(app)
-
+# app.secret_key = "123"
+app.config['SECRET_KEY'] = os.environ.get("FLASK_SECRET_KEY", "abcdef")
 app.jinja_env.undefined = StrictUndefined
 
 # ---------------------------------------------------------------#
@@ -117,8 +115,11 @@ def calculator():
 #---------------------------------------------------------------------#
 
 if __name__ == "__main__":
-    app.debug = True
-    connect_to_db(app)
+    connect_to_db(app, os.environ.get("DATABASE_URL"))
     # DebugToolbarExtension(app)
+    db.create_all(app=app)
 
-    app.run()
+    DEBUG = "NO_DEBUG" not in os.environ
+    PORT = int(os.environ.get("PORT", 5000))
+
+    app.run(host="0.0.0.0", port=PORT, debug=DEBUG)
