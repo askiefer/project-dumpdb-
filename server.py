@@ -19,15 +19,21 @@ app.jinja_env.undefined = StrictUndefined
 
 @app.route('/')
 def index():
-    """Homepage of the application"""
-
-    return render_template("base.html")
-
-@app.route('/sites')
-def create_map():
-    """Shows map of sites"""
+    """The application page"""
 
     return render_template("map.html")
+
+# @app.route('/')
+# def index():
+#     """Homepage of the application"""
+
+#     return render_template("base.html")
+
+# @app.route('/sites')
+# def create_map():
+#     """Shows map of sites"""
+
+#     return render_template("map.html")
 
 @app.route('/sites_json')
 def json_sites():
