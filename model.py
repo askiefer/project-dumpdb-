@@ -82,7 +82,29 @@ class Zipcode(db.Model):
         """Provides zipcode information when printed."""
 
         return "<Zipcode: zip=%s, Lat: latitude=%s, Long: longitude=%s>" % (self.zip, self.latitude, self.longitude)
-        
+
+##################################################################
+# Model definition of an update
+
+class Update(db.Model):
+    """Site updates from users"""
+
+    __tablename__ = "updates"
+
+    update_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    user_name = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(100), nullable=False)
+    source = db.Column(db.String(100), nullable=False)
+    existing_site = db.Column(db.String(100), nullable=True)
+    new_site = db.Column(db.String(100), nullable=True)
+    update = db.Column(db.String(100), nullable=True)
+    info = db.Column(db.String(100), nullable=True)
+
+    def __repr__(self):
+        """Provides user update information when printed."""
+
+        return "<Name: user_name=%s, Email: email=%s, Existing: existing_site=%s, New: new_site=%s, Update: update=%s, Info: info=%s>" % (self.user_name, self.email, self.existing_site, self.new_site, self.update, self.info)
+  
 ##################################################################
 # Helper functions
 

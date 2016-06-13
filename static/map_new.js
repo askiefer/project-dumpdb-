@@ -21,7 +21,6 @@
 
         MAP = new google.maps.Map(mapElement, mapOptions);
 
-
         // AJAX call using jQuery to retrieve the site objects
         $.get('/sites_json', function (sites) {
 
@@ -60,8 +59,8 @@
                 var parsedObject = parseSiteData(siteObjects[i]);
                 var objectInfo = makeInfoWindowContent(parsedObject);
 
+                // if ((siteObjects[i]["capacity"] !== null) && (siteObjects[i]["wasteInPlace"] !== null)) {
                 var objectChartData = makeChartData(siteObjects[i]["capacity"], siteObjects[i]["wasteInPlace"]);
-
                 var objectPieData = percentPieData(siteObjects[i]["wasteInPlace"], sumWasteInPlace);
 
                 objectMarker.setMap(MAP);
@@ -69,7 +68,6 @@
                 setEventResponse(objectMarker, objectInfo, objectChartData, objectPieData);
             }
             
-
             // pass the list of sites to the scatter plot function
             makeScatterPlot(openSites);
             // pass the sum and capacity to calculate the pie chart data 
@@ -78,8 +76,14 @@
             // pass the data, chart elements, and DOM ID to render the pie chart
             makePieChart(sumData, "sumCapacity", "sum-legend");
             autoComplete(stateSet, "#autocompleteState");
+            makeDoughnutChart(sumData, "doughnut");
+
+            sumPieData = percentPieData(sumWasteInPlace, sumWasteInPlace);
+            makePieChart(sumPieData, "pie", "pie-legend");
         });
+
     }
+
     // calculates the percent full of each site for the infowindow
 	function parseSiteData(siteObject) {
         if ((siteObject["wasteInPlace"] !== null) && (siteObject["capacity"] !== null)) {
@@ -139,15 +143,15 @@
         });
     }
 
-    // sets the piechart data and options given waste and capacity
+    // sets the doughnut chart data and options given waste and capacity
     function makeChartData(capacity, wasteInPlace) {
         var chartData;
         var remainingSpace;
         if ((capacity === null) || (wasteInPlace === null)) {
             chartData = [
                 {
-                    value: 100,
-                    color: "#bbbbbb",
+                    value: 1e-10,
+                    color: "#333333",
                     label: "Data not currently available",
                 }];
         } else {
@@ -167,9 +171,26 @@
         return chartData;
     }
 
+    function makeDoughnutChart(data, elementID) {
+        var doughnutOptions = {
+            segmentShowStroke : true,
+            segmentStrokeColor : "#fff",
+            segmentStrokeWidth : 2,
+            percentageInnerCutout : 50,
+            animation : true,
+            animationSteps : 100,
+            animationEasing : "easeOutBounce",
+            responsive: true,
+        };
+        var ctx = document.getElementById(elementID).getContext("2d");
+        var doughnut = new Chart(ctx).Doughnut(data, doughnutOptions);
+        document.getElementById('doughnut-legend').innerHTML = doughnut.generateLegend();
+    }
+
     function percentPieData(wasteInPlace, sumWasteInPlace) {
         var pieChartData;
-        if ((wasteInPlace !== null)) {
+
+        if (wasteInPlace !== null) {
             var sitePercent = ((wasteInPlace/sumWasteInPlace)*100).toFixed(2);
             var percentRemaining = (100-sitePercent).toFixed(2);
             pieChartData = [
@@ -182,6 +203,13 @@
                     value: percentRemaining,
                     color: "#bbbbbb",
                     label: "Percent covered by remaining U.S. sites"
+                }];
+        } else {
+            pieChartData = [
+                {
+                    value: 1e-10,
+                    color: "#333333",
+                    label: "Data not currently available",
                 }];
         }
         return pieChartData;
@@ -199,23 +227,6 @@
         document.getElementById(legendID).innerHTML=pie.generateLegend();
     }
 
-    function makeDoughnutChart(data, elementID) {
-        var doughnutOptions = {
-            segmentShowStroke : true,
-            segmentStrokeColor : "#fff",
-            segmentStrokeWidth : 2,
-            percentageInnerCutout : 50,
-            animation : true,
-            animationSteps : 100,
-            animationEasing : "easeOutBounce",
-            responsive: true,
-        };
-
-        var ctx = document.getElementById(elementID).getContext("2d");
-        var doughnut = new Chart(ctx).Doughnut(data, doughnutOptions);
-        document.getElementById('doughnut-legend').innerHTML = doughnut.generateLegend();
-    }
-
     // when zip-submit is clicked, validate the form and send the zipcode to the db
     $("#zip").submit(function (evt) {
         evt.preventDefault();
@@ -229,16 +240,11 @@
     function handleZipSubmit(zipcode) {
         // passes zipcode as a parameter to AJAX
         $.get('/zipsearch', {"zipcode": zipcode}, function(zipSiteObject) {
-            if (zipSiteObject["siteName"] === 'Great Pacific Garbage Patch') {
-                // grab the element id and change it to the picture of Texas
-                var zipObjectMarker = makeMarker(zipSiteObject);
-                var zipParsedObject = parseSiteData(zipSiteObject);
-                var zipObjectInfo = makeInfoWindowContent(zipParsedObject);
-                zipObjectMarker.setMap(MAP);
-                bindInfoWindow(zipObjectMarker, zipObjectInfo);
-                setVortexImage();
-                return;
-            }
+            
+            // if (zipSiteObject["siteName"] === 'Great Pacific Garbage Patch') {
+            //     setVortexImage();
+            // }
+
             if (zipSiteObject["wasteInPlace"] !== null) {
                 calculator(zipSiteObject["wasteInPlace"]);
                 document.getElementById("calc").value = zipSiteObject["wasteInPlace"];
@@ -255,16 +261,9 @@
             var zipPieData = percentPieData(zipParsedObject["wasteInPlace"], sumWasteInPlace);
             makeDoughnutChart(zipData, "doughnut");
             makePieChart(zipPieData, "pie", "pie-legend");
+
         });
     }
-
-    // function setVortexImage() {
-    //     $("#pie").remove("");
-    //     $"#doughnut").remove("");
-    //     $("#texas").attr('<img src="/static/images/texas.png">');
-    //     // $("#doughnut").before('<img src="/static/images/texas.png">');
-    //     debugger;
-    // }
 
     // calculator functionality 
     $("#calculator").keyup(function (evt) {
@@ -319,28 +318,29 @@
         siteInfo(name);
     });
 
-    function showUpdateResults(result) {
-        alert(result);
-    }
-
-    function updateDatabase(evt) {
-        console.log(formInputs);
+    $('#reportForm').submit(function (evt) {
         evt.preventDefault();
-
         var formInputs = {
-            "site": $("#dropdown").val(),
+            // $("#reportForm").serialize();
+            "name": $("#name").val(),
+            "email": $("#email").val(),
+            "source": $("#source").val(),
+            "dropdown": $("#dropdown").val(),
             "new": $("#new").val(),
             "update": $("#update").val(),
             "info": $("#info").val(),
         };
+        handleUpdateInfo(formInputs);
+    });
 
-        $.post("/update_database",
-            formInputs,
-            showUpdateResults
-            );
+    function handleUpdateInfo(formInputs) {
+        $.post("/update-database.json", formInputs, showUpdateSuccess);
     }
 
-    $('#report-submit').on('submit', updateDatabase);
+    function showUpdateSuccess() {
+        $('#reportForm').trigger("reset");
+        $('#update').text("Thank you for submitting landfill information.");
+    }
 
     $("form[name=reportForm]").parsley();
 
@@ -350,9 +350,6 @@
             parseInt(input);
                 if (isNaN(input) === true) {
                     alert("Please fill in valid digits");
-                }
             }
         }
-        // if ((isNaN(input) === true) && (input !== 'vortex'))  {
-        //     alert("Please fill in valid digits");
-        // }
+    }

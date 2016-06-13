@@ -86,6 +86,45 @@ ALTER SEQUENCE sites_site_id_seq OWNED BY sites.site_id;
 
 
 --
+-- Name: updates; Type: TABLE; Schema: public; Owner: akiefer
+--
+
+CREATE TABLE updates (
+    update_id integer NOT NULL,
+    user_name character varying(100) NOT NULL,
+    email character varying(100) NOT NULL,
+    source character varying(100) NOT NULL,
+    existing_site character varying(100),
+    new_site character varying(100),
+    update character varying(100),
+    info character varying(100)
+);
+
+
+ALTER TABLE updates OWNER TO akiefer;
+
+--
+-- Name: updates_update_id_seq; Type: SEQUENCE; Schema: public; Owner: akiefer
+--
+
+CREATE SEQUENCE updates_update_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE updates_update_id_seq OWNER TO akiefer;
+
+--
+-- Name: updates_update_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: akiefer
+--
+
+ALTER SEQUENCE updates_update_id_seq OWNED BY updates.update_id;
+
+
+--
 -- Name: zip_codes; Type: TABLE; Schema: public; Owner: akiefer
 --
 
@@ -103,6 +142,13 @@ ALTER TABLE zip_codes OWNER TO akiefer;
 --
 
 ALTER TABLE ONLY sites ALTER COLUMN site_id SET DEFAULT nextval('sites_site_id_seq'::regclass);
+
+
+--
+-- Name: update_id; Type: DEFAULT; Schema: public; Owner: akiefer
+--
+
+ALTER TABLE ONLY updates ALTER COLUMN update_id SET DEFAULT nextval('updates_update_id_seq'::regclass);
 
 
 --
@@ -2757,6 +2803,8 @@ COPY sites (site_id, site_type, site_name, site_state, site_address, site_city, 
 2645	Recycling	Davis Street Recycling	CA	2615 Davis Street	San Leandro	Alameda County	94577	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	146000
 2646	Recycling	Recology Grover & Newby Island	CA	1601 Dixon Landing Road	Milpitas	Santa Clara	95035	37.4548500000000004	-121.926109999999994	Private	Republic Services, Inc.	1930	2025	Open	235	\N	39006446	22330000	2005	\N
 2647	Landfill	Altamont Landfill	CA	10840 Altamont Pass Road	Livermore	Alameda	94551	37.75	-121.656670000000005	Private	Waste Management, Inc.	1980	2064	Open	175	175	124428571	57857143	2009	\N
+2648	Landfill	Great Pacific Garbage Patch	\N	\N	\N	\N	\N	35	145	None	\N	\N	\N	Open	\N	\N	\N	\N	\N	\N
+2649	Landfill	Sargasso Sea Trash Vortex	\N	\N	\N	\N	\N	34.307144000000001	-66.2695310000000006	None	\N	\N	\N	Open	\N	\N	\N	\N	\N	\N
 \.
 
 
@@ -2764,7 +2812,22 @@ COPY sites (site_id, site_type, site_name, site_state, site_address, site_city, 
 -- Name: sites_site_id_seq; Type: SEQUENCE SET; Schema: public; Owner: akiefer
 --
 
-SELECT pg_catalog.setval('sites_site_id_seq', 2647, true);
+SELECT pg_catalog.setval('sites_site_id_seq', 2649, true);
+
+
+--
+-- Data for Name: updates; Type: TABLE DATA; Schema: public; Owner: akiefer
+--
+
+COPY updates (update_id, user_name, email, source, existing_site, new_site, update, info) FROM stdin;
+\.
+
+
+--
+-- Name: updates_update_id_seq; Type: SEQUENCE SET; Schema: public; Owner: akiefer
+--
+
+SELECT pg_catalog.setval('updates_update_id_seq', 1, false);
 
 
 --
@@ -45302,6 +45365,14 @@ COPY zip_codes (zip, latitude, longitude) FROM stdin;
 
 ALTER TABLE ONLY sites
     ADD CONSTRAINT sites_pkey PRIMARY KEY (site_id);
+
+
+--
+-- Name: updates_pkey; Type: CONSTRAINT; Schema: public; Owner: akiefer
+--
+
+ALTER TABLE ONLY updates
+    ADD CONSTRAINT updates_pkey PRIMARY KEY (update_id);
 
 
 --

@@ -94,17 +94,19 @@
                                 </div>
                                 <div class="col-xs-4">
                                     <div class="row-fluid">
-                                            <label for="doughnut">Landfill Waste in Place<br />
-                                                <div id="texas"></div>
+                                        <!-- <div id="doughnut"> -->
+                                            <label for="doughnut">Landfill Waste in Place<br/>
+                                                <!-- <div id="texas"></div> -->
                                             <canvas id="doughnut" title="Waste in Place" height="150px" width="300px"></canvas></label>
                                             <div id="doughnut-legend" class="doughnut-legend"></div>
+                                        <div>
                                     </div>
                                     <div class="row-fluid">
                                             <label for="pie">Percent of Total <br> U.S. Waste in Place<br/>
                                                 <canvas id="pie" title="Percent of U.S. Waste in Place"></canvas></label>
                                             <div id="pie-legend" class="pie-legend"></div>
                                     </div>
-                                    </div>
+                                    <!-- </div> -->
                                 </div>
                             </div>
             </div>
@@ -190,21 +192,13 @@
                 <div class="row">
                      <p id="update">Do you have landfill data you would like to submit? <br>Please fill out this form to update the database.</p>
                         <div class="form-wrapper">
-                            <!-- <div class="callout-warning hidden">
-                                <h4>Form invalid</h4>
-                                <p>Please validate the form to submit.</p>
-                            </div>
-                            <div class="callout-success hidden">
-                              <h4>Thank you!</h4>
-                              <p>We appreciate the update.</p>
-                            </div> -->
                                 <p>
-                            <form name="reportForm" action="/update_database" method="POST" id="reportForm">
+                            <form name="reportForm" id="reportForm">
                               <label for="firstname">Full Name * :</label>
                               <input type="text" class="form-control" id="name" name="fullname" data-parsley-required data-parsley-error-message="Please enter a valid name."></p>
 
                                <p><label for="email">Email * :</label>
-                                <input type="email" class="form-control" name="email" data-parsley-required data-parsley-error-message="Please enter a valid email address."></p>
+                                <input type="email" class="form-control" id="email" name="email" data-parsley-required data-parsley-error-message="Please enter a valid email address."></p>
 
                                   <p>
                                   <label for="source">Landfill data source * :</label>

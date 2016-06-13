@@ -5,7 +5,7 @@ from flask import Flask, render_template, redirect, request, flash, session, jso
 from flask_debugtoolbar import DebugToolbarExtension
 # from flask.ext.cache import Cache
 
-from model import connect_to_db, db, Site, Zipcode
+from model import connect_to_db, db, Site, Zipcode, Update
 from haversine import min_haversine
 
 app = Flask(__name__)
@@ -78,43 +78,25 @@ def site_details():
     site = db.session.query(Site).filter(Site.site_name==name).first()
     return jsonify(site=site.serialize)
 
-@app.route('/update_database', methods=["POST"])
+@app.route('/update-database.json', methods=["POST"])
 def update_database():
-    """Updates landfill site or adds a new site"""
+    """Adds landfill site or a new site to the updates table in the database"""
 
-    # the landfill name
-    site = request.form.get("site")
+    # the form information
+    user_name = request.form.get("name")
+    email = request.form.get("email")
+    source = request.form.get("source")
+    existing_site = request.form.get("dropdown")
     new_site = request.form.get("new")
-    # the type of information 
     update = request.form.get("update")
     info = request.form.get("info")
 
-    # checks to see if the site is in the database and, if it is, updates it given the info
-    site = db.session.query(Site.site_id).filter(Site.site_name == site)
-
-    if site:
-        if update == "Status":
-            info.lower()
-            site.current_status = info
-            # take info and update it
-        elif update == "Zipcode":
-            site.zipcode = info
-
-        elif update == "Waste In Place":
-            site.waste_in_place = info
-
-        elif update == "Annual Tonnage":
-            site.annual_tonnage = info
-
-        else:
-            site.capacity = info
-
-    else:
-        new_site = Site(site_name=site)
-        db.session.add(new_site)
-
+    # adds the information to the updates table in the database
+    new_update = Update(user_name=user_name, email=email, source=source, existing_site=existing_site, new_site=new_site, update=update, info=info)
+    db.session.add(new_update)
     db.session.commit()
-    
+
+    return 'Success'
 
 @app.route('/calculator')
 def calculator():
