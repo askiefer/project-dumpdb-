@@ -17,11 +17,11 @@ app.jinja_env.undefined = StrictUndefined
 
 # ---------------------------------------------------------------#
 
-# @app.route('/')
-# def index():
-#     """Homepage of the application"""
+@app.route('/')
+def index():
+    """Homepage of the application"""
 
-#     return render_template("base.html")
+    return render_template("base.html")
 
 @app.route('/sites')
 def create_map():
